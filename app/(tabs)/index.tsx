@@ -21,10 +21,10 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
+        <ThemedText type="subtitle">Damir</ThemedText>
         <ThemedText>
           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> Muro
-          Press{' '}
+          Damir{' '}
           <ThemedText type="defaultSemiBold">
             {Platform.select({
               ios: 'cmd + d',
