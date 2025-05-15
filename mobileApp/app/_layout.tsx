@@ -4,10 +4,9 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -17,13 +16,20 @@ export default function RootLayout() {
     return null;
   }
 
+  const createDbIfNeeded = async (db: SQLiteDatabase) => {
+    console.log("Creating database if needed");
+    await db.execAsync(
+      "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT);"  
+    );
+  };
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <SQLiteProvider databaseName='test.db' onInit={createDbIfNeeded}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
-    </ThemeProvider>
+    </SQLiteProvider>
   );
 }
