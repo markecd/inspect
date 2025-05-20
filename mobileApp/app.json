@@ -13,9 +13,11 @@
     "android": {
       "package": "com.inspect.inspectapp",
       "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.anonymous.InspectApp"
     },
     "web": {
       "bundler": "metro",
