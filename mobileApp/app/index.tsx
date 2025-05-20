@@ -1,18 +1,15 @@
+// app/index.tsx
 import { useEffect } from 'react';
 import { router } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/auth';
-import { View, Text } from 'react-native';
-
-import 'expo-router/entry';
+import { Text } from 'react-native';
 
 export default function Index() {
-  
   useEffect(() => {
-    console.log("Checking auth state...");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.replace('/model');  
+        router.replace('/home'); 
       } else {
         router.replace('/login'); 
       }
@@ -21,5 +18,5 @@ export default function Index() {
     return unsubscribe;
   }, []);
 
-  return <Text>Počakajte trenutek...</Text>; 
+  return <Text>Počakajte trenutek...</Text>;
 }
