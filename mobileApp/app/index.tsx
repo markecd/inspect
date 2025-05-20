@@ -5,7 +5,7 @@ import ImageResizer from "react-native-image-resizer";
 import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system";
 import jpeg from "jpeg-js";
-import { Buffer } from "buffer"; // Make sure this is polyfilled
+import { Buffer } from "buffer"; 
 import labels from "../assets/labels.json";
 import { openDatabase } from "../app/database";
 
@@ -39,8 +39,7 @@ export default function Index() {
         const model = await loadTensorflowModel({ url: modelPath });
         console.log("Model loaded successfully!");
 
-        // Load and resize image
-        const asset = Asset.fromModule(require("../assets/images/komar.jpg")); 
+        const asset = Asset.fromModule(require("../assets/images/pika1.jpeg")); 
         await asset.downloadAsync();
         const fileUri = asset.localUri || asset.uri;
         setImageUri(fileUri);
@@ -66,7 +65,7 @@ export default function Index() {
         }
 
         const inputTensor = new Float32Array(1 * 299 * 299 * 3);
-        inputTensor.set(floatArray); // fill batched input
+        inputTensor.set(floatArray); 
 
         const output = await model.run([inputTensor]);
         console.log("Model output:", output);
@@ -84,7 +83,6 @@ console.log("Top 5 classes:", top5);
         );
         setPredictedLabel(rodId.toString());
 
-        // Fetch insect info from DB
         const db = await openDatabase();
         const result = db.getFirstSync<Insect>(
           `
