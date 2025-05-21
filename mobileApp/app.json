@@ -4,7 +4,6 @@
     "slug": "InspectApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "inspectapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,12 +11,13 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.inspect.inspectapp",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/splash-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.InspectApp"
+      "permissions": ["CAMERA"]
     },
     "web": {
       "bundler": "metro",
