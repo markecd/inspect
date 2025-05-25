@@ -10,8 +10,10 @@ export async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
     if (dbInstance) return dbInstance;
 
     const fileExists = await FileSystem.getInfoAsync(dbPath);
-
-    if (!fileExists.exists) {
+    if (fileExists.exists) {
+        console.log("🗑️ Brisanje obstoječe baze za prisilno kopiranje nove...");
+        await FileSystem.deleteAsync(dbPath, { idempotent: true });  /*Če delaš spremembe v bazi to odkomentiraš da se posodobi, ker se more nova verzija kopirat*/
+      
         console.log("📦 Copying preloaded DB from assets...");
         const asset = Asset.fromModule(require('../assets/inspect.db'));
         await asset.downloadAsync();

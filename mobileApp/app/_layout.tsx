@@ -1,6 +1,23 @@
-import { Stack } from "expo-router";
+import { Slot, usePathname } from "expo-router";
+import { View, StyleSheet } from "react-native";
+import Navbar from '../components/Navbar/Navbar';
 
 export default function RootLayout() {
-  return <Stack screenOptions={{ headerShown: false }}/>;
+  const pathname = usePathname();
+  const hideNavbarOn = ['/auth/login', '/auth/register'];
+  const shouldShowNavbar = !hideNavbarOn.includes(pathname);
+
+  return (
+    <View style={styles.container}>
+      <Slot />
+      {shouldShowNavbar && <Navbar />}
+    </View>
+  );
 }
-//tu not daj stvari ki se morajo zrenderat pred vsem drugim(fonti...)
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#6C584C', 
+  },
+});
