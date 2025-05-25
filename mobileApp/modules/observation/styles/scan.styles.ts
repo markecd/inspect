@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,17 +10,96 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   overlay: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 40,
     left: 0,
     right: 0,
-    alignItems: 'center',
+    alignItems: "center",
   },
   overlayText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: "rgba(0,0,0,0.6)",
     padding: 8,
     borderRadius: 8,
+  },
+  cornerTopLeft: {
+    position: "absolute",
+    top: height * 0.25,
+    left: width * 0.1,
+    width: 30,
+    height: 30,
+    borderTopWidth: 4,
+    borderLeftWidth: 4,
+    borderColor: "#F0EAD2",
+  },
+  cornerTopRight: {
+    position: "absolute",
+    top: height * 0.25,
+    right: width * 0.1,
+    width: 30,
+    height: 30,
+    borderTopWidth: 4,
+    borderRightWidth: 4,
+    borderColor: "#F0EAD2",
+  },
+  cornerBottomLeft: {
+    position: "absolute",
+    bottom: height * 0.25,
+    left: width * 0.1,
+    width: 30,
+    height: 30,
+    borderBottomWidth: 4,
+    borderLeftWidth: 4,
+    borderColor: "#F0EAD2",
+  },
+  cornerBottomRight: {
+    position: "absolute",
+    bottom: height * 0.25,
+    right: width * 0.1,
+    width: 30,
+    height: 30,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
+    borderColor: "#F0EAD2",
+  },
+  returnButton: {
+    position: "absolute",
+    top: height * 0.07,
+    left: width * 0.05,
+    backgroundColor: "#F0EAD2",
+    borderRadius: 40,
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 8,
+  },
+  returnIcon: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain",
+  },
+  scanButton: {
+    position: "absolute",
+    bottom: 50,
+    alignSelf: "center",
+    backgroundColor: "#F0EAD2",
+    borderRadius: 40,
+    width: 70,
+    height: 70,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 8,
+  },
+  scanIcon: {
+    width: 60,
+    height: 60,
+    resizeMode: "contain",
+  },
+  loadingAnimation: {
+    position: "absolute",
+    top: "50%",
+    alignSelf: "center",
   },
 });
