@@ -1,4 +1,4 @@
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, View, Text, ScrollView } from 'react-native';
 import { useAchievements } from '../../hooks/useAchievements';
 import { AchievementCard } from '../../components/Achievement/AchievementCard';
 import { styles } from '../../assets/styles/Achievements/achievements.style';
@@ -21,12 +21,12 @@ export default function AchievementScreen() {
   }
 
   return (
-    <FlatList
-      data={achievementsWithIcons}
-      keyExtractor={(item) => item.id.toString()}
-      contentContainerStyle={styles.list}
-      numColumns={2}
-      renderItem={({ item }) => <AchievementCard achievement={item} />}
-    />
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        {achievementsWithIcons?.map((item, index) => (
+          <AchievementCard key={index} achievement={item}></AchievementCard>
+        ))}
+      </ScrollView>
+    </View>
   );
 }

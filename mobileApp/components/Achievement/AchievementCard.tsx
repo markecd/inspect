@@ -1,5 +1,5 @@
-import { View, Text, Image } from 'react-native';
-import { styles } from '../../assets/styles/Achievements/achievements.style';
+import { View, Text, Image } from "react-native";
+import { styles } from "../../assets/styles/Achievements/achievements.style";
 
 type Props = {
   achievement: {
@@ -12,31 +12,20 @@ type Props = {
 
 export function AchievementCard({ achievement }: Props) {
   return (
-    <View
-      style={[
-        styles.card,
-        !achievement.dosezen && styles.cardBlurred,
-      ]}
-    >
-     
-      {achievement.dosezen === 1 && (
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>Doseženo</Text>
-        </View>
-      )}
+    <View style={styles.achievementCardOuterContainer}>
+      <View style={[styles.card, !achievement.dosezen && styles.cardBlurred]}>
+        {achievement.dosezen === 1 && (
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>Doseženo</Text>
+          </View>
+        )}
 
-     
-      <Image
-        source={achievement.icon}
-        style={[
-          styles.icon,
-          !achievement.dosezen && styles.iconBlurred,
-        ]}
-      />
-
-      
+        <Image
+          source={achievement.icon}
+          style={[styles.icon, !achievement.dosezen && styles.iconBlurred]}
+        />
+      </View>
       <Text style={styles.title}>{achievement.naziv}</Text>
     </View>
   );
 }
-

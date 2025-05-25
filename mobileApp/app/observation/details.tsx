@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useEffect, useState, useRef } from "react";
-import { styles } from "../../modules/observation/styles/details.styles";
+import { styles } from "../../assets/styles/Observation/details.styles";
 import { router, useLocalSearchParams } from "expo-router";
 import labels from "../../assets/labels.json";
 import { openDatabase } from "../../services/database";
