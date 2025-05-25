@@ -1,17 +1,35 @@
+import Navbar from "@/components/Navbar/Navbar";
 import { AuthProvider } from "@/modules/auth/context/AuthContext";
 import { CVModelProvider } from "@/modules/cv/provider/CVModelProvider";
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
+import { View, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+
 export default function RootLayout() {
+
+  const pathname = usePathname();
+  const hideNavbarOn = ["/auth/login", "/auth/register"];
+  const shouldShowNavbar = !hideNavbarOn.includes(pathname);
+  
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
         <CVModelProvider>
-          <Stack screenOptions={{ headerShown: false }} />
+          <View style={styles.container}>
+            <Stack screenOptions={{ headerShown: false }} />
+            {shouldShowNavbar && <Navbar />}
+          </View>
         </CVModelProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );
 }
-//tu not daj stvari ki se morajo zrenderat pred vsem drugim(fonti...)
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#6C584C",
+  },
+});
