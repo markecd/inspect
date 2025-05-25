@@ -9,7 +9,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 export default function RootLayout() {
 
   const pathname = usePathname();
-  const hideNavbarOn = ["/auth/login", "/auth/register"];
+  const hideNavbarOn = ["/auth/login", "/auth/register", "/observation", "/observation/details"];
   const shouldShowNavbar = !hideNavbarOn.includes(pathname);
   
   return (

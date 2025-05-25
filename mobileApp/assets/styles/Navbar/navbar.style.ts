@@ -9,6 +9,7 @@ export default StyleSheet.create({
     borderTopWidth: 5,
     borderTopColor: '#A98467',
     height: 120,
+    marginBottom: 30
   },
   icon: {
     width: 64,

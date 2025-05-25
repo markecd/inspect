@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image, ActivityIndicator} from "react-native";
 import { Camera, CameraView } from "expo-camera";
 import { useEffect, useState, useRef } from "react";
-import { styles } from "../../modules/observation/styles/scan.styles";
+import { styles } from "../../assets/styles/Observation/scan.styles";
 import { preprocessImage } from "@/modules/cv/services/preprocessor";
 import { router } from 'expo-router';
 import { useCVModel } from "@/modules/cv/provider/CVModelProvider";
@@ -46,7 +46,7 @@ export default function ScanPage() {
   return (
     <View style={styles.container}>
       <CameraView ref={cameraRef} style={styles.camera} />
-      <TouchableOpacity style={styles.returnButton} onPress={() => router.replace('/model')}>
+      <TouchableOpacity style={styles.returnButton} onPress={() => router.replace('/collection')}>
         <Image source={require("../../assets/icons/return_icon.png")} style={styles.returnIcon} />
       </TouchableOpacity>
       <View style={styles.cornerTopLeft} />
