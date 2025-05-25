@@ -1,3 +1,4 @@
+import Header from "@/components/Header/Header";
 import Navbar from "@/components/Navbar/Navbar";
 import { AuthProvider } from "@/modules/auth/context/AuthContext";
 import { CVModelProvider } from "@/modules/cv/provider/CVModelProvider";
@@ -9,7 +10,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 export default function RootLayout() {
 
   const pathname = usePathname();
-  const hideNavbarOn = ["/auth/login", "/auth/register"];
+  const hideNavbarOn = ["/auth/login", "/auth/register", "/observation"];
   const shouldShowNavbar = !hideNavbarOn.includes(pathname);
   
   return (
@@ -17,6 +18,7 @@ export default function RootLayout() {
       <AuthProvider>
         <CVModelProvider>
           <View style={styles.container}>
+            {shouldShowNavbar && <Header />}
             <Stack screenOptions={{ headerShown: false }} />
             {shouldShowNavbar && <Navbar />}
           </View>

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image, ActivityIndicator} from "react-native";
 import { Camera, CameraView } from "expo-camera";
 import { useEffect, useState, useRef } from "react";
-import { styles } from "../../modules/observation/styles/scan.styles";
+import { styles } from "../../assets/styles/Observation/scan.styles";
 import { preprocessImage } from "@/modules/cv/services/preprocessor";
 import { router } from 'expo-router';
 import { useCVModel } from "@/modules/cv/provider/CVModelProvider";
