@@ -2,11 +2,11 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: '#6C584C',
+    backgroundColor: '#A98467',
     padding: 16,
-    alignItems: 'center',
     borderRadius: 10,
     marginBottom: 12,
+    margin: 20
   },
   avatar: {
     width: 80,
@@ -47,4 +47,38 @@ export default StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  logoutButton: {
+    backgroundColor: 'red',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 6
+  },
+  logoutText: {
+    color: "#F0EAD2"
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    color: "#F0EAD2",
+    letterSpacing: 0.3
+  },
+  listContainer: {
+    paddingHorizontal: 10,
+  },
+  card: {
+    backgroundColor: "#6C584C",
+    padding: 12,
+    marginRight: 10,
+    borderRadius: 8,
+    width: 150,
+    alignItems: 'center'
+  },
+  cardTitle: {
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#F0EAD2",
+    fontSize: 11
+  }
 });
