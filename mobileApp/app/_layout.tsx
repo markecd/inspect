@@ -1,3 +1,4 @@
+import Header from "@/components/Header/Header";
 import Navbar from "@/components/Navbar/Navbar";
 import { AuthProvider } from "@/modules/auth/context/AuthContext";
 import { CVModelProvider } from "@/modules/cv/provider/CVModelProvider";
@@ -17,6 +18,7 @@ export default function RootLayout() {
       <AuthProvider>
         <CVModelProvider>
           <View style={styles.container}>
+            {shouldShowNavbar && <Header />}
             <Stack screenOptions={{ headerShown: false }} />
             {shouldShowNavbar && <Navbar />}
           </View>
