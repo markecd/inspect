@@ -1,22 +1,36 @@
 // app/index.tsx
-import { useEffect } from 'react';
-import { router } from 'expo-router';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../modules/auth/firebase/auth';
-import { Text } from 'react-native';
+import { useEffect } from "react";
+import { router } from "expo-router";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../modules/auth/firebase/auth";
+import { ActivityIndicator, Text, View } from "react-native";
 
 export default function Index() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.replace('/observation'); 
+        router.replace('/observation');
       } else {
-        router.replace('/auth/login'); 
+        router.replace('/auth/login');
       }
     });
 
     return unsubscribe;
   }, []);
 
-  return <Text>Počakajte trenutek...</Text>;
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#6C584C",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <ActivityIndicator
+        size="large"
+        color="#ffffff"
+      />
+    </View>
+  );
 }

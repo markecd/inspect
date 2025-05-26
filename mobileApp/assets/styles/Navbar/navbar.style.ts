@@ -22,5 +22,6 @@ export default StyleSheet.create({
     borderRadius: 40,
     backgroundColor: '#A98467',
     padding: 10,
+    elevation: 10
   },
 });

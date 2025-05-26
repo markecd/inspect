@@ -119,10 +119,11 @@ export const styles = StyleSheet.create({
     height: 20,
   },
   preglejButton: {
+    position: "absolute",
     backgroundColor: "#6C584C",
     width: 100,
     alignSelf: "center",
-    bottom: -10,
+    bottom: 5,
     padding: 5,
     borderRadius: 12,
   },
@@ -156,6 +157,7 @@ export const styles = StyleSheet.create({
     color: "#F0EAD2",
     fontWeight: "bold",
     fontSize: 24,
+    flexWrap: "wrap",
   },
   rodLatinskoImeZuzelke: {
     color: "#F0EAD2",
@@ -165,8 +167,8 @@ export const styles = StyleSheet.create({
   },
   rodNazivZuzelkeWrapper: {
     display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-end",
+    flexDirection: "column",
+    alignItems: "flex-start",
     marginBottom: 30,
   },
   rodMainInfoOuterContainer: {
@@ -235,7 +237,8 @@ export const styles = StyleSheet.create({
   rodTaxonomyContainer: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    gap: 15
   },
   taxonomyImage: {
     width: 230,
@@ -245,7 +248,8 @@ export const styles = StyleSheet.create({
   taxonomyDataContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: 20
+    gap: 20,
+    width: "40%"
   },
   taxonomyRedContainer: {
     backgroundColor: "#A98467",
