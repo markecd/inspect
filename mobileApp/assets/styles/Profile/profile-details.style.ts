@@ -3,58 +3,96 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     backgroundColor: '#A98467',
-    padding: 16,
     borderRadius: 10,
-    marginBottom: 12,
-    margin: 20
+    margin: 20,
+    marginBottom: 0,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+    paddingTop: 35
   },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#D9D9D9',
-    marginBottom: 8,
+  containerDosezki: {
+    backgroundColor: '#A98467',
+    borderRadius: 10,
+    margin: 20,
+    padding: 16,
+    position: 'relative',
   },
   username: {
-    color: '#fff',
+    backgroundColor: '#6C584C',
+    color: '#F0EAD2',
     fontSize: 16,
+    letterSpacing: 0.3,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
     fontWeight: 'bold',
-    marginBottom: 8,
+    alignSelf: 'flex-start',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   infoBox: {
-    backgroundColor: '#A98467',
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 8,
-    width: '100%',
-    alignItems: 'center',
+    backgroundColor: '#6C584C',
+    borderRadius: 10,
+    padding: 16,
+    display:'flex',
+    marginLeft: 60,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   value: {
-    color: '#fff',
+    color: '#BC9143',
     fontSize: 18,
     fontWeight: 'bold',
   },
   label: {
-    color: '#fff',
+    color: '#F0EAD2',
     fontSize: 14,
-    marginBottom: 4,
+    letterSpacing: 0.3,
+    fontWeight: 'bold'
   },
   levelTag: {
-    backgroundColor: '#C4A484',
+    position: 'absolute',
+    top: -12,
+    right: 8,
+    backgroundColor: '#BC9143',
+    color: '#F0EAD2',
+    letterSpacing: 0.3,
+    fontSize: 16,
+    fontWeight: 'bold',
     paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 6,
-    color: '#fff',
-    fontWeight: 'bold',
+    borderRadius: 10,
+    elevation: 3,
   },
   logoutButton: {
+    marginTop: 12,
     backgroundColor: 'red',
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 6
+    borderRadius: 10,
+    alignSelf: 'flex-start',
   },
   logoutText: {
-    color: "#F0EAD2"
+    color: "#F0EAD2",
+    fontWeight: 'bold',
+    letterSpacing: 0.4,
+    fontSize: 16
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 4,
+    gap: 50
   },
   heading: {
     fontSize: 20,
@@ -70,15 +108,21 @@ export default StyleSheet.create({
   card: {
     backgroundColor: "#6C584C",
     padding: 12,
-    marginRight: 10,
+    marginRight: 15,
     borderRadius: 8,
-    width: 150,
+    width: 140,
     alignItems: 'center'
   },
   cardTitle: {
     fontWeight: "bold",
-    marginBottom: 5,
     color: "#F0EAD2",
-    fontSize: 11
-  }
+    fontSize: 11,
+    marginBottom: -15
+  },
+  achievementIcon: {
+    width: 75,
+    height: 75,
+    resizeMode: 'contain',
+  },
+  
 });

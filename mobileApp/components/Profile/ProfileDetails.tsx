@@ -56,21 +56,32 @@ export default function ProfileDetails() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.avatar} />
+    <Text style={styles.levelTag}>Level {user.level}</Text>
+    <View style={{display: 'flex', justifyContent:'center', alignItems:'center'}}>
       <Text style={styles.username}>{user.username}</Text>
-
-      <View style={styles.infoBox}>
-        <Text style={styles.value}>46</Text><Text style={styles.label}>opažanj</Text>
-        <Text style={styles.value}>5</Text><Text style={styles.label}>kolekcij</Text>
-        <Text style={styles.value}>12</Text><Text style={styles.label}>dosežkov</Text>
-        <Text style={styles.label}>Član od 2022</Text>
-      </View>
-
-      <Text style={styles.levelTag}>Level {user.level}</Text>
-
       <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Odjava</Text>
+          <Text style={styles.logoutText}>Odjava</Text>
       </TouchableOpacity>
+    </View>
+      <View style={styles.infoBox}>
+        <View style={styles.infoRow}>
+          <Text style={styles.value}>46</Text>
+          <Text style={styles.label}>opažanj</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <Text style={styles.value}>10</Text>
+          <Text style={styles.label}>kolekcij</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <Text style={styles.value}>12</Text>
+          <Text style={styles.label}>dosežkov</Text>
+        </View>
+      </View>
+              
+
+
     </View>
   );
 }
