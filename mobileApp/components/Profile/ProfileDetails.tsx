@@ -4,6 +4,7 @@ import styles from '../../assets/styles/Profile/profile-details.style';
 import { auth, signOut } from '../../modules/auth/firebase/auth';
 import { openDatabase } from '../../services/database';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileDetails() {
   const [user, setUser] = useState<any>(null); 
@@ -11,6 +12,7 @@ export default function ProfileDetails() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      await AsyncStorage.removeItem("local_user_id");
       router.replace('/auth/login');
     } catch (error) {
       console.error("Napaka pri odjavi:", error);

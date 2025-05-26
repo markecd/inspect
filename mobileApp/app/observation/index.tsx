@@ -46,7 +46,7 @@ export default function ScanPage() {
   return (
     <View style={styles.container}>
       <CameraView ref={cameraRef} style={styles.camera} />
-      <TouchableOpacity style={styles.returnButton} onPress={() => router.replace('/model')}>
+      <TouchableOpacity style={styles.returnButton} onPress={() => router.replace('/collection')}>
         <Image source={require("../../assets/icons/return_icon.png")} style={styles.returnIcon} />
       </TouchableOpacity>
       <View style={styles.cornerTopLeft} />

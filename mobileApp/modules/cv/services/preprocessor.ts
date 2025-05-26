@@ -28,6 +28,5 @@ export async function preprocessImage(imageUri: string) {
 
   const inputTensor = new Float32Array(1 * 299 * 299 * 3);
   inputTensor.set(floatArray);
-    console.log("Dynamic input sample:", inputTensor.slice(0, 20));
   return [inputTensor];
 }

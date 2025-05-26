@@ -27,10 +27,11 @@ export const styles = StyleSheet.create({
   },
   insectImage: {
     width: 160,
-    height: 285,
+    height: 300,
     borderRadius: 10
   },
   mainInfoContainer: {
+    width: 230,
     display: "flex",
     flexDirection: "column",
   },
@@ -47,8 +48,8 @@ export const styles = StyleSheet.create({
   insectName: {
     fontSize: 26,
     flexShrink: 1,
-        color: "#F0EAD2" 
-
+    flexWrap: "wrap",
+    color: "#F0EAD2" 
   },
   insectScientificName: {
     fontSize: 16,
