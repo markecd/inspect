@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
   redContentContainer: {
     display: "flex",
     flexDirection: "column",
-    padding: 10,
+    padding: 30,
     backgroundColor: "#6C584C",
   },
   druzinaSectionContainer: {
@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 10,
-    marginBottom: 15,
+    marginBottom: 25,
   },
   insectSectionImageContainer: {
     width: 150,
@@ -68,30 +68,200 @@ export const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 10
+    elevation: 10,
   },
-  insectSectionImage: {},
+  insectSectionImage: {
+    width: 130,
+    height: 130,
+    borderRadius: 10,
+  },
   insectSectionInfoContainer: {
-    width: 230,
+    width: 200,
     height: 150,
     backgroundColor: "#A98467",
     borderRadius: 10,
     display: "flex",
-    padding: 5,
-    elevation: 10
+    padding: 12,
+    elevation: 10,
   },
   insectName: {
     color: "#F0EAD2",
-    fontWeight: "semibold",
+    fontWeight: "700",
     fontSize: 16,
     paddingBottom: 10,
   },
-  observationCas: {},
-  observationLocation: {},
+  observationCas: {
+    color: "#F0EAD2",
+    fontWeight: "condensedBold",
+    fontSize: 12,
+    paddingBottom: 10,
+  },
+  observationLocation: {
+    color: "#F0EAD2",
+    fontWeight: "condensedBold",
+    fontSize: 12,
+    paddingBottom: 10,
+  },
   insectNahajalisce: {
     color: "#F0EAD2",
     fontWeight: "condensedBold",
     fontSize: 12,
     paddingBottom: 10,
   },
+  observationDetailSection: {
+    display: "flex",
+    flexDirection: "row",
+    alignContent: "center",
+    gap: 5,
+  },
+  detailImage: {
+    width: 20,
+    height: 20,
+  },
+  preglejButton: {
+    backgroundColor: "#6C584C",
+    width: 100,
+    alignSelf: "center",
+    bottom: -10,
+    padding: 5,
+    borderRadius: 12,
+  },
+  preglejText: {
+    color: "#F0EAD2",
+    alignSelf: "center",
+    fontWeight: "bold",
+  },
+  ujetBadge: {
+    backgroundColor: "#BC9143",
+    width: 60,
+    padding: 5,
+    borderRadius: 10,
+    position: "absolute",
+    top: -15,
+    right: 10,
+    elevation: 10,
+  },
+  ujetText: {
+    color: "#F0EAD2",
+    alignSelf: "center",
+    fontWeight: "bold",
+  },
+  rodContentContainer: {
+    display: "flex",
+    flexDirection: "column",
+    padding: 30,
+    backgroundColor: "#6C584C",
+  },
+  rodImeZuzelke: {
+    color: "#F0EAD2",
+    fontWeight: "bold",
+    fontSize: 24,
+  },
+  rodLatinskoImeZuzelke: {
+    color: "#F0EAD2",
+    fontWeight: "semibold",
+    fontSize: 20,
+    fontStyle: "italic",
+  },
+  rodNazivZuzelkeWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-end",
+    marginBottom: 30,
+  },
+  rodMainInfoOuterContainer: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 5,
+  },
+  rodImageContainer: {
+    width: 150,
+    height: 150,
+    backgroundColor: "#A98467",
+    borderRadius: 10,
+    elevation: 10,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  rodImage: {
+    width: 130,
+    height: 130,
+    borderRadius: 10,
+  },
+  rodMainInfoContainer: {
+    width: 200,
+    height: 150,
+    display: "flex",
+    flexDirection: "column",
+  },
+  dateLocationWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-end"
+  },
+  dateLocationIcon: {
+    width: 40,
+    height: 40
+  },
+  dateLocationText: {
+    color: "#F0EAD2",
+    fontWeight: "semibold",
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  askBuggyButton: {
+    backgroundColor: "#A98467",
+    width: 175,
+    alignSelf: "center",
+    padding: 7.5,
+    borderRadius: 12,
+    bottom: -40,
+    elevation: 10
+  },
+  askBuggyText: {
+    alignSelf: "flex-start",
+    color: "#F0EAD2",
+    fontWeight: "bold",
+    fontSize: 12,
+  },
+  buggyIcon: {
+    width: 50,
+    height: 50,
+    position: "absolute",
+    top: -5,
+    right: 5
+  },
+  rodTaxonomyContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  taxonomyImage: {
+    width: 230,
+    height: 230,
+    elevation: 1,
+  },
+  taxonomyDataContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20
+  },
+  taxonomyRedContainer: {
+    backgroundColor: "#A98467",
+    borderRadius: 10,
+    padding: 10,
+    elevation: 10
+  },
+  taxonomyRedText: {
+    color: "#F0EAD2",
+    fontWeight: "bold",
+    fontSize: 12,
+  },
+  rodDescriptionContainer:{},
+  rodDescriptionText: {
+    color: "#F0EAD2",
+    fontWeight: "600",
+    fontSize: 12,
+  }
 });

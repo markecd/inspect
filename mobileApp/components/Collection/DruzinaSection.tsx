@@ -6,12 +6,13 @@ type DruzinaSectionProps = {
   imeDruzine: string;
   insects: {
     cas: string | null;
+    id: number;
     lokacija: string | null;
     nahajalisce_rodu: string;
     najdeno: number;
     naziv_druzine: string;
     naziv_rodu: string;
-    pot_slike: string | null;
+    pot_slike: string | undefined;
   }[];
 };
 
@@ -22,6 +23,7 @@ const DruzinaSection = (props: DruzinaSectionProps) => {
       {props.insects.map((item, index) => (
         <InsectSection
           key={index}
+          idInsekta={item.id}
           nazivInsekta={item.naziv_rodu}
           potSlike={item.pot_slike}
           lokacija={item.lokacija}

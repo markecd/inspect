@@ -9,6 +9,7 @@ import { useLocalSearchParams } from "expo-router";
 import DruzinaSection from "@/components/Collection/DruzinaSection";
 
 type InsectsOfRedRow = {
+  id: number;
   naziv_rodu: string;
   najdeno: number;
   nahajalisce_rodu: string;
@@ -36,12 +37,11 @@ export default function RedPage() {
   useEffect(() => {
     (async () => {
       try {
-        console.log("ajaa", red);
         const db = await openDatabase();
         const redId = map[red as string];
         const result = await db.getAllAsync<InsectsOfRedRow>(
           `
-                        SELECT r.naziv_rodu, r.najdeno, r.nahajalisce_rodu, d.naziv_druzine, o.lokacija, o.cas, o.pot_slike
+                        SELECT r.id, r.naziv_rodu, r.najdeno, r.nahajalisce_rodu, d.naziv_druzine, o.lokacija, o.cas, o.pot_slike
                         FROM ROD r 
                         LEFT JOIN OPAZANJE o ON r.id = o.TK_rod
                         LEFT JOIN DRUZINA d ON r.TK_DRUZINA = d.id
@@ -60,12 +60,10 @@ export default function RedPage() {
 
   function processData(data: InsectsOfRedRow[]) {
     const uniqueDruzine = [...new Set(data.map((item) => item.naziv_druzine))];
-    console.log(uniqueDruzine);
     const preprocessed = uniqueDruzine.map((druzina) => ({
       druzina,
       insects: data.filter((insect) => insect.naziv_druzine == druzina),
     }));
-    console.log(preprocessed[1])
     setRedData(preprocessed);
   }
 

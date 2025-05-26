@@ -34,8 +34,8 @@ export default function RegisterScreen() {
       }
 
       db.runSync(
-        `INSERT INTO UPORABNIK (username, geslo, email, xp, level) VALUES (?, ?, ?, ?, ?)`,
-        [username, password, email, 0, 1]
+        `INSERT INTO UPORABNIK (username, geslo, email, xp, level, firebase_uid) VALUES (?, ?, ?, ?, ?, ?)`,
+        [username, password, email, 0, 1, user.uid]
       );
   
       console.log('Uporabnik vstavljen v SQLite!');

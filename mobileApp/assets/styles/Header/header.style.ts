@@ -6,8 +6,9 @@ export default StyleSheet.create({
       alignItems: 'center',
       backgroundColor: '#6C584C', 
       padding: 16,
-      marginTop: 50,
+      marginTop: 20,
       justifyContent: 'space-between',
+      paddingBottom: 2
     },
     icon1: {
       width: 60,
@@ -27,7 +28,8 @@ export default StyleSheet.create({
       borderRadius: 10,
       marginHorizontal: 16,
       overflow: 'hidden',
-      width: 10
+      width: 10,
+      elevation: 10
     },
     progressFill: {
       backgroundColor: '#b3cc84',
