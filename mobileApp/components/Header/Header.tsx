@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import styles from '../../assets/styles/Header/header.style';
 import { router } from 'expo-router';
 
 export default function Header() {
   const progress = 0.65; // 65% za primer – lahko dinamično
+
 
   const handleUserIconPress = () => {
     router.push('/profile'); 
