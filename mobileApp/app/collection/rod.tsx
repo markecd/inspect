@@ -36,7 +36,6 @@ export default function RodPage() {
       );
       setRod(result);
     })();
-    console.log(rod);
   }, []);
 
   return (
@@ -45,7 +44,7 @@ export default function RodPage() {
         <View style={styles.rodNazivZuzelkeWrapper}>
           <Text style={styles.rodImeZuzelke}>{rod?.naziv_rodu}</Text>
           <Text style={styles.rodLatinskoImeZuzelke}>
-            {" (" + rod?.latinski_naziv_rodu + ")"}
+            ({rod?.latinski_naziv_rodu})
           </Text>
         </View>
         <View style={styles.rodMainInfoOuterContainer}>
