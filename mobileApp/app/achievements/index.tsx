@@ -9,7 +9,7 @@ export default function AchievementScreen() {
   
   const achievementsWithIcons = achievements.map(a => ({
     ...a,
-    icon: require('../../assets/images/achievements.png'), 
+    icon: require('../../assets/images/achievement_1.png'), 
   }));
 
   if (loading) {
