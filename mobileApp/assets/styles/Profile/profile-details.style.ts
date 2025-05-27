@@ -124,5 +124,8 @@ export default StyleSheet.create({
     height: 75,
     resizeMode: 'contain',
   },
-  
+  profileContentContainer: {
+    flex: 1,
+    backgroundColor: "#6C584C"
+  }
 });
