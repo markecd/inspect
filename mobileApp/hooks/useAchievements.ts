@@ -22,38 +22,6 @@ export function useAchievements() {
 
       try {
     
-        /*const firebaseUser = auth.currentUser;
-        if (!firebaseUser || !firebaseUser.email) {
-          console.warn("Uporabnik ni prijavljen v Firebase.");
-          setLoading(false);
-          return;
-        }
-
-
-
-     
-        /*const currentUser = db.getFirstSync<any>(
-          `SELECT id FROM UPORABNIK WHERE email = ?`,
-          [firebaseUser.email]
-        );
-
-        if (!currentUser) {
-          console.warn("Uporabnik ni najden v lokalni bazi.");
-          setLoading(false);
-          return;
-        }
-
-        const userId = currentUser.id;
-
-        
-        const result = db.getAllSync<any>(
-          `SELECT d.*, ud.tk_uporabnik IS NOT NULL AS dosezen
-           FROM DOSEZEK d
-           LEFT JOIN UPORABNIK_DOSEZEK ud
-           ON ud.tk_dosezek = d.id AND ud.tk_uporabnik = ?`,
-          [userId]
-        );*/
-
         const localUserIdStr = await AsyncStorage.getItem("local_user_id");
         if (!localUserIdStr) {
           console.warn("local_user_id ni najden v AsyncStorage.");
