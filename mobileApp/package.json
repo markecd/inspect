@@ -23,6 +23,7 @@
     "expo-blur": "~14.1.4",
     "expo-camera": "^16.1.6",
     "expo-constants": "~17.1.6",
+    "expo-document-picker": "^13.1.5",
     "expo-file-system": "~18.1.10",
     "expo-font": "~13.3.1",
     "expo-gl": "~15.1.5",
@@ -52,7 +53,8 @@
     "react-native-screens": "~4.10.0",
     "react-native-tflite": "^0.0.2",
     "react-native-web": "~0.20.0",
-    "react-native-webview": "13.13.5"
+    "react-native-webview": "13.13.5",
+    "expo-av": "~15.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -218,14 +218,15 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
     padding: 7.5,
     borderRadius: 12,
-    bottom: -40,
+    bottom: -39,
     elevation: 10
   },
   askBuggyText: {
     alignSelf: "flex-start",
-    color: "#F0EAD2",
+    color: "#DDE5B6",
     fontWeight: "bold",
     fontSize: 12,
+    marginLeft: 10
   },
   buggyIcon: {
     width: 50,

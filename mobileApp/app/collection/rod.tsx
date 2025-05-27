@@ -4,8 +4,10 @@ import { styles } from "../../assets/styles/Collection/collection.styles";
 import { openDatabase } from "@/services/database";
 import { ScrollView } from "react-native-gesture-handler";
 import { useLocalSearchParams } from "expo-router";
+import Comments from "@/components/Observation/Comments";
 
 type InsectDataRow = {
+  id: number;
   naziv_rodu: string;
   latinski_naziv_rodu: string;
   opis_rodu: string;
@@ -25,7 +27,7 @@ export default function RodPage() {
       const db = await openDatabase();
       const result = await db.getFirstAsync<InsectDataRow>(
         `
-                                SELECT r.naziv_rodu, r.latinski_naziv_rodu, r.opis_rodu, o.lokacija, o.cas, o.pot_slike, d.naziv_druzine, re.naziv_reda
+                                SELECT o.id, r.naziv_rodu, r.latinski_naziv_rodu, r.opis_rodu, o.lokacija, o.cas, o.pot_slike, d.naziv_druzine, re.naziv_reda
                                 FROM ROD r 
                                 JOIN OPAZANJE o ON r.id = o.TK_rod
                                 JOIN DRUZINA d ON r.TK_DRUZINA = d.id
@@ -95,7 +97,9 @@ export default function RodPage() {
         <View style={styles.rodDescriptionContainer}>
             <Text style={styles.rodDescriptionText}>{rod?.opis_rodu}</Text>
         </View>
+        {rod?.id && <Comments observationId={rod.id} />}
       </ScrollView>
+
     </View>
   );
 }
