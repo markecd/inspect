@@ -22,18 +22,34 @@ export default function ProfileDetails() {
   useEffect(() => {
     const fetchUser = async () => {
       const db = await openDatabase();
-      const firebaseUser = auth.currentUser;
+      //const firebaseUser = auth.currentUser;
 
-      if (!firebaseUser?.email) {
+      /*if (!firebaseUser?.email) {
         console.warn("Uporabnik ni prijavljen.");
         return;
-      }
+      } */
+
 
       try {
-        const result = db.getFirstSync<any>(
+        /*const result = db.getFirstSync<any>(
           `SELECT * FROM UPORABNIK WHERE email = ?`,
           [firebaseUser.email]
+        );*/
+
+        const localUserIdStr = await AsyncStorage.getItem("local_user_id");
+        if (!localUserIdStr) {
+          console.warn("local_user_id ni najden v AsyncStorage.");
+          console.log({localUserIdStr})
+          return;
+        }
+
+        const userId = parseInt(localUserIdStr);
+
+        const result = db.getFirstSync<any>(
+          `SELECT * FROM UPORABNIK WHERE id = ?`,
+          [userId]
         );
+
 
         if (result) {
           setUser(result);

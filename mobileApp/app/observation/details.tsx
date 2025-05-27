@@ -11,6 +11,7 @@ import {
 } from "@/services/LocationService";
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Comments from "@/components/Observation/Comments";
 
 type Insect = {
   id: number;
@@ -28,6 +29,7 @@ export default function DetailsPage() {
   const [locationPermission, setLocationPermission] = useState<boolean | null>(
     null
   );
+
 
   useEffect(() => {
     (async () => {
@@ -104,6 +106,7 @@ export default function DetailsPage() {
       db.runSync(`UPDATE ROD SET najdeno = 1 WHERE id = ?`, [rodId]);
 
       db.execSync("COMMIT");
+
     } catch (error) {
       db.execSync("ROLLBACK");
       console.error(error);
@@ -134,6 +137,8 @@ export default function DetailsPage() {
       const rodId = numberRodId;
 
       await runObservationTransaction(naziv, lokacijaShort, casString, imagePath, userId, rodId);
+     
+
 
       router.push("/collection")
     } catch (error) {
