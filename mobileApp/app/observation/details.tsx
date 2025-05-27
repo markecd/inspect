@@ -12,6 +12,12 @@ import {
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Comments from "@/components/Observation/Comments";
+import { checkAchievements } from "@/modules/achievements/services/AchievementService";
+import {
+  getAchievementName,
+  getImageForAchievement,
+} from "@/hooks/useToast";
+import Toast from "react-native-toast-message";
 
 type Insect = {
   id: number;
@@ -29,7 +35,7 @@ export default function DetailsPage() {
   const [locationPermission, setLocationPermission] = useState<boolean | null>(
     null
   );
-
+  const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
   useEffect(() => {
     (async () => {
@@ -106,7 +112,6 @@ export default function DetailsPage() {
       db.runSync(`UPDATE ROD SET najdeno = 1 WHERE id = ?`, [rodId]);
 
       db.execSync("COMMIT");
-
     } catch (error) {
       db.execSync("ROLLBACK");
       console.error(error);
@@ -115,10 +120,14 @@ export default function DetailsPage() {
 
   const handleSaveObservation = async () => {
     try {
+      router.push("/collection");
+
       const numberRodId = Number(insectData?.id);
       const cas = new Date();
-      const casString = `${cas.getDate()}. ${cas.getMonth() + 1}. ${cas.getFullYear()} - ${cas.toTimeString().split(" ")[0]}`;
-      
+      const casString = `${cas.getDate()}. ${
+        cas.getMonth() + 1
+      }. ${cas.getFullYear()} - ${cas.toTimeString().split(" ")[0]}`;
+
       const lokacija = await getLocation();
       const lokacijaShort = lokacija.coords.latitude
         .toString()
@@ -136,11 +145,37 @@ export default function DetailsPage() {
       const userId = Number(await AsyncStorage.getItem("local_user_id"));
       const rodId = numberRodId;
 
-      await runObservationTransaction(naziv, lokacijaShort, casString, imagePath, userId, rodId);
-     
+      await runObservationTransaction(
+        naziv,
+        lokacijaShort,
+        casString,
+        imagePath,
+        userId,
+        rodId
+      );
 
-
-      router.push("/collection")
+      await sleep(1500);
+      setTimeout(async () => {
+        try {
+          const achieved = await checkAchievements("opazanje");
+          achieved.forEach(async (item) => {
+            let name = await getAchievementName(item);
+            let imagePath = getImageForAchievement(name);
+            Toast.show({
+              type: "achievementToast",
+              props: {
+                txt1: "Doseženo: ",
+                txt2: name,
+                txt3: imagePath,
+                onPress: () => router.push("/achievements"),
+              },
+            });
+            await sleep(5000);
+          });
+        } catch (err) {
+          console.error("Achievement check failed:", err);
+        }
+      }, 0);
     } catch (error) {
       console.error("error: ", error);
     }

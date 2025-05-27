@@ -26,7 +26,7 @@ export default function AchievementsDetails() {
       <Text style={styles.heading}>Dosežki</Text>
 
       <FlatList
-        data={achievements}
+        data={dosezeni}
         keyExtractor={(item) => item.id.toString()}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
