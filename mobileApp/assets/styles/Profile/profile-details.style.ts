@@ -111,6 +111,7 @@ export default StyleSheet.create({
     marginRight: 15,
     borderRadius: 8,
     width: 140,
+    height: 120,
     alignItems: 'center'
   },
   cardTitle: {
@@ -127,5 +128,13 @@ export default StyleSheet.create({
   profileContentContainer: {
     flex: 1,
     backgroundColor: "#6C584C"
-  }
+  },
+  starsWrapper: {
+    flexDirection: "row",
+    gap: 2,
+  },
+  starIcon: {
+    width: 23,
+    height: 23
+  },
 });
