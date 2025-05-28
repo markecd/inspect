@@ -1,5 +1,6 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { styles } from "../../assets/styles/Achievements/achievements.style";
+import { showAchievementInfo } from "@/modules/gamification/utils/achievementUtils";
 
 type Props = {
   achievement: {
@@ -10,9 +11,10 @@ type Props = {
   };
 };
 
+
 export function AchievementCard({ achievement }: Props) {
   return (
-    <View style={styles.achievementCardOuterContainer}>
+    <TouchableOpacity style={styles.achievementCardOuterContainer} onPress={() => showAchievementInfo(achievement.id)}>
       <View style={[styles.card, !achievement.dosezen && styles.cardBlurred]}>
         {achievement.dosezen === 1 && (
           <View style={styles.badge}>
@@ -26,6 +28,6 @@ export function AchievementCard({ achievement }: Props) {
         />
       </View>
       <Text style={styles.title}>{achievement.naziv}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }

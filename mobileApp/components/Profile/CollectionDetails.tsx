@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { openDatabase } from '@/services/database';
 import styles from '../../assets/styles/Profile/profile-details.style';
+import { router } from "expo-router";
 
 type Props = {
   friendId?: number;
@@ -76,36 +77,37 @@ export default function CollectionDetails({ friendId }: Props) {
     <View style={styles.containerDosezki}>
       <Text style={styles.heading}>Kolekcije</Text>
 
-      <FlatList
-        data={collections}
-        keyExtractor={(item) => item.red_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.listContainer}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Image
-              source={getCollectionIcon(item.naziv_reda)}
-              style={styles.achievementIcon}
+            <FlatList
+                data={collections}
+                keyExtractor={(item) => item.red_id.toString()}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.listContainer}
+                renderItem={({ item }) => (
+                    <TouchableOpacity style={styles.card} onPress={() => router.push({pathname: '/collection/red', params: {red: item.naziv_reda}})}>
+                        <Image
+                            source={getCollectionIcon(item.naziv_reda)}
+                            style={styles.achievementIcon}
+                        />
+                        <View style={styles.starsWrapper}>
+                            {Array.from({ length: 4 }).map((_, i) => (
+                                <Image
+                                    key={i}
+                                    source={
+                                        i < item.stars
+                                            ? require("../../assets/icons/star_icon.png")
+                                            : require("../../assets/icons/star_empty_icon.png")
+                                    }
+                                    style={styles.starIcon}
+                                />
+                            ))}
+                        </View>
+
+                    </TouchableOpacity>
+                )}
             />
-            <View style={styles.starsWrapper}>
-              {Array.from({ length: 4 }).map((_, i) => (
-                <Image
-                  key={i}
-                  source={
-                    i < item.stars
-                      ? require('../../assets/icons/star_icon.png')
-                      : require('../../assets/icons/star_empty_icon.png')
-                  }
-                  style={styles.starIcon}
-                />
-              ))}
-            </View>
-          </View>
-        )}
-      />
-    </View>
-  );
+        </View>
+    );
 }
 
 function getCollectionIcon(naziv: string) {
