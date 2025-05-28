@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { openDatabase } from '@/services/database';
 import styles from '../../assets/styles/Profile/profile-details.style';
+import { showAchievementInfo } from "@/modules/gamification/utils/achievementUtils";
 
 type Props = {
   friendId?: number;
@@ -77,20 +78,24 @@ export default function AchievementsDetails({ friendId }: Props) {
     <View style={styles.containerDosezki}>
       <Text style={styles.heading}>Dosežki</Text>
 
+      {dosezeni.length == 0 && 
+      <Text style={styles.noAchievementsText}>Ni še nobenih dosežkov!</Text>
+      }
       <FlatList
         data={dosezeni}
+      
         keyExtractor={(item) => item.id.toString()}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => showAchievementInfo(item.id)}>
             <Image
-              source={getAchievementIcon(item.id)}
+              source={getAchievementIcon(item.id)} 
               style={styles.achievementIcon}
             />
             <Text style={styles.cardTitle}>{item.naziv}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>

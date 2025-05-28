@@ -11,7 +11,13 @@ import {
 } from "@/services/LocationService";
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Comments from "@/components/Observation/Comments";
+import { checkAchievements } from "@/modules/gamification/services/AchievementService";
+import {
+  getAchievementName,
+  getImageForAchievement,
+} from "@/modules/gamification/utils/achievementUtils";
+import Toast from "react-native-toast-message";
+import { useXpUpdater } from "@/hooks/useXpUpdater";
 
 type Insect = {
   id: number;
@@ -29,7 +35,8 @@ export default function DetailsPage() {
   const [locationPermission, setLocationPermission] = useState<boolean | null>(
     null
   );
-
+  const gainXp = useXpUpdater();
+  const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
   useEffect(() => {
     (async () => {
@@ -106,41 +113,78 @@ export default function DetailsPage() {
       db.runSync(`UPDATE ROD SET najdeno = 1 WHERE id = ?`, [rodId]);
 
       db.execSync("COMMIT");
-
     } catch (error) {
       db.execSync("ROLLBACK");
       console.error(error);
     }
   };
 
+  async function saveObservation() {
+    const numberRodId = Number(insectData?.id);
+    const cas = new Date();
+    const casString = `${cas.getDate()}. ${
+      cas.getMonth() + 1
+    }. ${cas.getFullYear()} - ${cas.toTimeString().split(" ")[0]}`;
+
+    const lokacija = await getLocation();
+    const lokacijaShort = lokacija.coords.latitude
+      .toString()
+      .concat(",", lokacija.coords.longitude.toString());
+    const naziv = numberRodId
+      .toString()
+      .concat("-", casString)
+      .concat(
+        "-",
+        lokacija.coords.latitude
+          .toString()
+          .concat(",", lokacija.coords.longitude.toString())
+      );
+    const imagePath = await saveImage(photoPath.toString());
+    const userId = Number(await AsyncStorage.getItem("local_user_id"));
+    const rodId = numberRodId;
+
+    await runObservationTransaction(
+      naziv,
+      lokacijaShort,
+      casString,
+      imagePath,
+      userId,
+      rodId
+    );
+  }
+
   const handleSaveObservation = async () => {
     try {
-      const numberRodId = Number(insectData?.id);
-      const cas = new Date();
-      const casString = `${cas.getDate()}. ${cas.getMonth() + 1}. ${cas.getFullYear()} - ${cas.toTimeString().split(" ")[0]}`;
-      
-      const lokacija = await getLocation();
-      const lokacijaShort = lokacija.coords.latitude
-        .toString()
-        .concat(",", lokacija.coords.longitude.toString());
-      const naziv = numberRodId
-        .toString()
-        .concat("-", casString)
-        .concat(
-          "-",
-          lokacija.coords.latitude
-            .toString()
-            .concat(",", lokacija.coords.longitude.toString())
-        );
-      const imagePath = await saveImage(photoPath.toString());
-      const userId = Number(await AsyncStorage.getItem("local_user_id"));
-      const rodId = numberRodId;
+      await saveObservation();
 
-      await runObservationTransaction(naziv, lokacijaShort, casString, imagePath, userId, rodId);
-     
+      router.push("/collection");
 
-
-      router.push("/collection")
+      setTimeout(async () => {
+        try {
+          const achieved = await checkAchievements("opazanje");
+          achieved.acomplishedAchievements.forEach(async (item) => {
+            let name = await getAchievementName(item);
+            let imagePath = getImageForAchievement(name);
+            Toast.show({
+              type: "achievementToast",
+              props: {
+                txt1: "Doseženo: ",
+                txt2: name,
+                txt3: imagePath,
+                onPress: () => {
+                  Toast.hide();
+                  router.push("/achievements");
+                },
+              },
+              visibilityTime: 3000,
+            });
+            await sleep(4000);
+          });
+          await gainXp(20 + achieved.totalXp);
+        } catch (err) {
+          console.error("Achievement check failed:", err);
+        }
+      }, 0);
     } catch (error) {
       console.error("error: ", error);
     }
@@ -156,24 +200,22 @@ export default function DetailsPage() {
             )}
           </View>
           <View style={styles.mainInfoContainer}>
+            <View>
             <Text style={styles.insectName}>{insectData?.naziv_rodu}</Text>
             <Text style={styles.insectScientificName}>
               {insectData?.latinski_naziv_rodu}
             </Text>
+            </View>
             <View style={styles.taxonomyTree}>
-              <Text style={styles.insectOrderName}>{insectData?.red}</Text>
+              <View style={styles.taxonomyTextContainer}>
+                <Text style={styles.insectOrderName}>{insectData?.red}</Text>
+                <Text style={styles.insectFamilyName}>{insectData?.druzina}</Text>
+                <Text style={styles.insectOrderName}>{insectData?.naziv_rodu}</Text>
+              </View>
               <Image
-                source={require("../../assets/icons/arrow_icon.png")}
+                source={require("../../assets/icons/taxonomy_icon.png")}
                 style={styles.arrowIcon}
               />
-              <Text style={styles.insectFamilyName}>{insectData?.druzina}</Text>
-              <Image
-                source={require("../../assets/icons/arrow_icon.png")}
-                style={styles.arrowIcon}
-              />
-              <Text style={styles.insectOrderName}>
-                {insectData?.naziv_rodu}
-              </Text>
             </View>
           </View>
         </View>

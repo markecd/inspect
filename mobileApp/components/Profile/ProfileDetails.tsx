@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import styles from '../../assets/styles/Profile/profile-details.style';
-import { auth, signOut } from '../../modules/auth/firebase/auth';
-import { openDatabase } from '../../services/database';
-import { router } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, Image } from "react-native";
+import styles from "../../assets/styles/Profile/profile-details.style";
+import { auth, signOut } from "../../modules/auth/firebase/auth";
+import { openDatabase } from "../../services/database";
+import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { levelIconMap } from "@/modules/gamification/utils/achievementUtils";
 
 type Props = {
-  friendId?: number; // če je podan, prikazujemo prijateljev profil
+  friendId?: number; 
 };
 
 export default function ProfileDetails({ friendId }: Props) {
-  const [user, setUser] = useState<any>(null); 
+  const [user, setUser] = useState<any>(null);;
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
       await AsyncStorage.removeItem("local_user_id");
-      router.replace('/auth/login');
+      router.replace("/auth/login");
     } catch (error) {
       console.error("Napaka pri odjavi:", error);
     }
@@ -42,7 +43,11 @@ export default function ProfileDetails({ friendId }: Props) {
         }
 
         const result = db.getFirstSync<any>(
-          `SELECT * FROM UPORABNIK WHERE id = ?`,
+          `SELECT u.username, u.level, u.xp, COUNT(ud.id) as dosezki, COUNT(o.id) as opazanja 
+           FROM UPORABNIK u
+           LEFT JOIN UPORABNIK_DOSEZEK ud ON u.id = ud.tk_uporabnik
+           LEFT JOIN OPAZANJE o ON u.id = o.TK_uporabnik
+           WHERE u.id = ?`,
           [userId]
         );
 
@@ -69,27 +74,29 @@ export default function ProfileDetails({ friendId }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.levelTag}>Level {user.level}</Text>
-      <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <TouchableOpacity onPress={handleLogout} style={styles.odjavaButton}>
+        <Text style={styles.logoutText}>Odjava</Text>
+      </TouchableOpacity>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
         <Text style={styles.username}>{user.username}</Text>
-        {!friendId && (
-          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-            <Text style={styles.logoutText}>Odjava</Text>
-          </TouchableOpacity>
-        )}
+        <Image style={styles.levelIcon} source={levelIconMap[user.level]}/>
       </View>
-
       <View style={styles.infoBox}>
-        <View style={styles.infoRow}>
-          <Text style={styles.value}>46</Text>
+        <View style={styles.infoBoxValues}>
+          <Text style={styles.value}>{user.opazanja}</Text>
+          <Text style={styles.value}>{user.xp}</Text>
+          <Text style={styles.value}>{user.dosezki}</Text>
+        </View>
+        <View style={styles.infoBoxLabels}>
           <Text style={styles.label}>opažanj</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.value}>10</Text>
-          <Text style={styles.label}>kolekcij</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.value}>12</Text>
+          <Text style={styles.label}>xp</Text>
           <Text style={styles.label}>dosežkov</Text>
         </View>
       </View>

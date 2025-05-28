@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { openDatabase } from '../services/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
+import { getAchievementDescription } from '../modules/gamification/utils/achievementUtils';
 
 export type Achievement = {
   id: number;
@@ -9,6 +11,8 @@ export type Achievement = {
   xp_vrednost: number;
   dosezen: number;
 };
+
+
 
 export function useAchievements(userIdOverride?: number) {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
