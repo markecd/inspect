@@ -7,8 +7,12 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { levelIconMap } from "@/modules/gamification/utils/achievementUtils";
 
-export default function ProfileDetails() {
-  const [user, setUser] = useState<any>(null);
+type Props = {
+  friendId?: number; 
+};
+
+export default function ProfileDetails({ friendId }: Props) {
+  const [user, setUser] = useState<any>(null);;
 
   const handleLogout = async () => {
     try {
@@ -22,17 +26,21 @@ export default function ProfileDetails() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const db = await openDatabase();
-
       try {
-        const localUserIdStr = await AsyncStorage.getItem("local_user_id");
-        if (!localUserIdStr) {
-          console.warn("local_user_id ni najden v AsyncStorage.");
-          console.log({ localUserIdStr });
-          return;
-        }
+        const db = await openDatabase();
 
-        const userId = parseInt(localUserIdStr);
+        let userId: number;
+
+        if (friendId !== undefined) {
+          userId = friendId;
+        } else {
+          const localUserIdStr = await AsyncStorage.getItem("local_user_id");
+          if (!localUserIdStr) {
+            console.warn("local_user_id ni najden v AsyncStorage.");
+            return;
+          }
+          userId = parseInt(localUserIdStr);
+        }
 
         const result = db.getFirstSync<any>(
           `SELECT u.username, u.level, u.xp, COUNT(DISTINCT ud.id) as dosezki, COUNT(DISTINCT o.id) as opazanja 
@@ -46,15 +54,15 @@ export default function ProfileDetails() {
         if (result) {
           setUser(result);
         } else {
-          console.warn("Uporabnik ni v lokalni bazi brt");
+          console.warn("Uporabnik ni v lokalni bazi.");
         }
       } catch (err) {
-        console.error("Pri branju podatkov iz baze error", err);
+        console.error("Napaka pri branju iz baze:", err);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [friendId]);
 
   if (!user) {
     return (
