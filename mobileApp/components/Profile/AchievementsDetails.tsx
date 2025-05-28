@@ -1,6 +1,7 @@
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
-import { showAchievementInfo, useAchievements } from "../../hooks/useAchievements";
+import { useAchievements } from "../../hooks/useAchievements";
 import styles from '../../assets/styles/Profile/profile-details.style';
+import { showAchievementInfo } from "@/modules/gamification/utils/achievementUtils";
 
 export default function AchievementsDetails() {
   const { achievements, loading } = useAchievements();
@@ -25,6 +26,9 @@ export default function AchievementsDetails() {
     <View style={styles.containerDosezki}>
       <Text style={styles.heading}>Dosežki</Text>
 
+      {dosezeni.length == 0 && 
+      <Text style={styles.noAchievementsText}>Ni še nobenih dosežkov!</Text>
+      }
       <FlatList
         data={dosezeni}
         keyExtractor={(item) => item.id.toString()}

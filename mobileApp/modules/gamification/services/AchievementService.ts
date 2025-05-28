@@ -129,7 +129,18 @@ class EntomologZacetnikAchievement implements Achievement {
   readonly xp: number = achievements[this.id];
 
   check(): boolean {
-    if (getRedsDiscovered.length < 8) return false;
+    if (getRedsDiscovered().length < 8) return false;
+    return true;
+  }
+}
+
+class RodovniUcenjakAchievement implements Achievement {
+  readonly id: number = 12;
+  readonly type: string = "opazanje";
+  readonly xp: number = achievements[this.id];
+
+  check(): boolean {
+    if (getRedsDiscovered.length < 3) return false;
     return true;
   }
 }
@@ -173,12 +184,13 @@ const AllAchievements: Record<number, { new (): Achievement }> = {
   6: KacjiOpazovalecAchievement,
   9: ZnanstvenikAchievement,
   10: EntomologZacetnikAchievement,
+  12: RodovniUcenjakAchievement,
   13: OpazovalecAchievement,
 };
 
 export async function checkAchievements(
   eventType: string
-): Promise<number[]> {
+): Promise<{ acomplishedAchievements: number[], totalXp: number }> {
   const userId = Number(await AsyncStorage.getItem("local_user_id"));
   const db = await openDatabase();
   const achievementsQuery = db.getAllSync<{ id: number }>(
@@ -219,35 +231,30 @@ export async function checkAchievements(
   });
 
   let acomplishedAchievements = [];
+  let totalXp = 0;
+
   for (const [id, xp] of Object.entries(acomplished)) {
     acomplishedAchievements.push(Number(id));
+    totalXp += xp;
     const db = await openDatabase();
-    db.execSync("BEGIN TRANSACTION");
     try {
       db.runSync(
         `INSERT INTO UPORABNIK_DOSEZEK (tk_uporabnik, tk_dosezek) VALUES (?,?)`,
         [userId, Number(id)]
       );
 
-      db.runSync(`UPDATE UPORABNIK SET xp = xp + ? WHERE id = ?`, [
-        Number(xp),
-        userId,
-      ]);
-
-      db.execSync("COMMIT");
+      
     } catch (error) {
-      db.execSync("ROLLBACK");
       console.error(error);
     }
   }
-  return acomplishedAchievements;
+  return {acomplishedAchievements, totalXp};
 }
 
 export async function getDisctinctRodsForRed() {
   try {
     const userId = Number(await AsyncStorage.getItem("local_user_id"));
     const db = await openDatabase();
-    console.log("yee");
     const countZuzelke = db.getAllSync<RodReds>(
       `SELECT d.TK_RED, o.TK_rod, COUNT(DISTINCT o.TK_rod) as count FROM OPAZANJE o JOIN ROD r ON o.TK_rod = r.id JOIN DRUZINA d ON r.TK_DRUZINA = d.id WHERE o.TK_UPORABNIK = ? GROUP BY d.TK_RED`,
       [userId]
@@ -263,7 +270,6 @@ export async function getKomentarsForDistinctReds() {
   try {
     const userId = Number(await AsyncStorage.getItem("local_user_id"));
     const db = await openDatabase();
-    console.log("yee");
     const countKomentar = db.getAllSync<Komentar>(
       `SELECT DISTINCT o.id as opazanje, COUNT(k.tk_opazanje) as count FROM KOMENTAR k JOIN OPAZANJE o ON k.tk_opazanje = o.id WHERE o.TK_UPORABNIK = ? GROUP BY o.id`,
       [userId]

@@ -1,8 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { styles } from "../../assets/styles/Achievements/achievements.style";
-import { getAchievementDescription } from "@/hooks/useToast";
-import Toast from "react-native-toast-message";
-import { showAchievementInfo } from "@/hooks/useAchievements";
+import { showAchievementInfo } from "@/modules/gamification/utils/achievementUtils";
 
 type Props = {
   achievement: {
