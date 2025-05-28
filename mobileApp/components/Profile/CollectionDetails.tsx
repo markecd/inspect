@@ -1,6 +1,7 @@
-import { View, Text, Image, FlatList, StyleSheet } from "react-native";
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useCollections } from "@/hooks/useCollections";
 import styles from '../../assets/styles/Profile/profile-details.style';
+import { router } from "expo-router";
 
 export default function CollectionDetails() {
     const { collections, loading } = useCollections();
@@ -24,7 +25,7 @@ export default function CollectionDetails() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.listContainer}
                 renderItem={({ item }) => (
-                    <View style={styles.card}>
+                    <TouchableOpacity style={styles.card} onPress={() => router.push({pathname: '/collection/red', params: {red: item.naziv_reda}})}>
                         <Image
                             source={getCollectionIcon(item.naziv_reda)}
                             style={styles.achievementIcon}
@@ -43,7 +44,7 @@ export default function CollectionDetails() {
                             ))}
                         </View>
 
-                    </View>
+                    </TouchableOpacity>
                 )}
             />
         </View>

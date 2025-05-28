@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   achievementText: {
     color: "#6C584C",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
   },
   achievementIcon: {

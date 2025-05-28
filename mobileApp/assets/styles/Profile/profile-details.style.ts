@@ -10,14 +10,17 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
-    paddingTop: 35
+    paddingTop: 35,
+    elevation: 10
   },
   containerDosezki: {
     backgroundColor: '#A98467',
     borderRadius: 10,
     margin: 20,
-    padding: 16,
+    marginBottom: 0,
+    paddingBottom: 10,
     position: 'relative',
+    elevation: 10
   },
   username: {
     backgroundColor: '#6C584C',
@@ -97,28 +100,31 @@ export default StyleSheet.create({
   heading: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 10,
+    margin: 10,
     paddingHorizontal: 10,
     color: "#F0EAD2",
     letterSpacing: 0.3
   },
   listContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
   },
   card: {
     backgroundColor: "#6C584C",
     padding: 12,
     marginRight: 15,
+    marginLeft: 15,
+    marginBottom: 15,
     borderRadius: 8,
     width: 140,
     height: 120,
-    alignItems: 'center'
+    alignItems: 'center',
+    elevation: 10,
   },
   cardTitle: {
     fontWeight: "bold",
     color: "#F0EAD2",
     fontSize: 11,
-    marginBottom: -15
+    marginBottom: -15,
   },
   achievementIcon: {
     width: 75,

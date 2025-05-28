@@ -1,5 +1,5 @@
-import { View, Text, FlatList, Image } from "react-native";
-import { useAchievements } from "../../hooks/useAchievements";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
+import { showAchievementInfo, useAchievements } from "../../hooks/useAchievements";
 import styles from '../../assets/styles/Profile/profile-details.style';
 
 export default function AchievementsDetails() {
@@ -32,13 +32,13 @@ export default function AchievementsDetails() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => showAchievementInfo(item.id)}>
             <Image
-              source={getAchievementIcon(item.id)} // ⬅️ Glej to funkcijo spodaj
+              source={getAchievementIcon(item.id)} 
               style={styles.achievementIcon}
             />
             <Text style={styles.cardTitle}>{item.naziv}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>

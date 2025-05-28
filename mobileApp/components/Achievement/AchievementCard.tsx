@@ -2,6 +2,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { styles } from "../../assets/styles/Achievements/achievements.style";
 import { getAchievementDescription } from "@/hooks/useToast";
 import Toast from "react-native-toast-message";
+import { showAchievementInfo } from "@/hooks/useAchievements";
 
 type Props = {
   achievement: {
@@ -12,19 +13,6 @@ type Props = {
   };
 };
 
-async function showAchievementInfo(achievementId: number){
-                let achievementDescription = await getAchievementDescription(achievementId)
-  
-                Toast.show({
-                  type: 'achievementInfoToast',
-                  props: {
-                    txt1: "Doseži: ",
-                    txt2: achievementDescription,
-                    txt3: require("../../assets/icons/Bogomolke_icon.png"),
-                    onPress: () => {},
-                  },
-                });
-}
 
 export function AchievementCard({ achievement }: Props) {
   return (
