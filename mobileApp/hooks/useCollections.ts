@@ -10,16 +10,38 @@ export type Collection = {
   stars: number;
 };
 
-export function useCollections() {
+export function useCollections(userIdOverride?: number) {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
+    
+
     const fetchCollections = async () => {
       try {
         const db = await openDatabase();
-        const localUserIdStr = await AsyncStorage.getItem("local_user_id");
-        const userId = Number(localUserIdStr);
+
+        let resolvedUserId = userIdOverride;
+        if (!resolvedUserId) {
+          const localUserIdStr = await AsyncStorage.getItem("local_user_id");
+          if (!localUserIdStr) {
+            console.warn("local_user_id ni najden v AsyncStorage.");
+            if (isMounted) setLoading(false);
+            return;
+          }
+          resolvedUserId = parseInt(localUserIdStr);
+        }
+
+        console.log("Prikazujem kolekcije za userId:", resolvedUserId);
+
+const debug = db.getAllSync<any>(
+  `SELECT TK_rod, TK_uporabnik FROM OPAZANJE WHERE TK_uporabnik = ?`,
+  [resolvedUserId]
+);
+console.log("Najdene rode za tega userja:", debug);
+
 
         const result = db.getAllSync<any>(
           `SELECT 
@@ -32,7 +54,7 @@ export function useCollections() {
           JOIN ROD ON ROD.TK_DRUZINA = DRUZINA.id
           LEFT JOIN OPAZANJE ON OPAZANJE.TK_rod = ROD.id AND OPAZANJE.TK_uporabnik = ?
           GROUP BY RED.id`,
-          [userId]
+          [resolvedUserId]
         );
 
         const dataWithStars = result.map((item: any) => {
@@ -44,16 +66,24 @@ export function useCollections() {
           return { ...item, stars };
         });
 
-        setCollections(dataWithStars);
+        if (isMounted) {
+          setCollections(dataWithStars);
+        }
       } catch (error) {
         console.error("Napaka pri nalaganju kolekcij:", error);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchCollections();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [userIdOverride]);
 
   return { collections, loading };
 }
