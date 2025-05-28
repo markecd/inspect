@@ -2,6 +2,7 @@ import Header from "@/components/Header/Header";
 import Navbar from "@/components/Navbar/Navbar";
 import { AuthProvider } from "@/modules/auth/context/AuthContext";
 import { CVModelProvider } from "@/modules/cv/provider/CVModelProvider";
+import { UserStatsProvider } from "@/modules/gamification/contexts/UserStatsContext";
 import { Stack, usePathname } from "expo-router";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -44,12 +45,14 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
         <CVModelProvider>
-          <View style={styles.container}>
-            {shouldShowNavbar && <Header />}
-            <Stack screenOptions={{ headerShown: false }} />
-            {shouldShowNavbar && <Navbar />}
-            <Toast config={toastConfig} />
-          </View>
+          <UserStatsProvider>
+            <View style={styles.container}>
+              {shouldShowNavbar && <Header />}
+              <Stack screenOptions={{ headerShown: false }} />
+              {shouldShowNavbar && <Navbar />}
+              <Toast config={toastConfig} />
+            </View>
+          </UserStatsProvider>
         </CVModelProvider>
       </AuthProvider>
     </GestureHandlerRootView>
@@ -62,7 +65,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#6C584C",
   },
   toast: {
-    zIndex: 10000,
     width: "90%",
     top: 10,
     height: 100,
@@ -70,7 +72,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     position: "absolute",
     alignSelf: "center",
-    //elevation: 10,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",

@@ -3,7 +3,7 @@ import { openDatabase } from '../services/database';
 import { auth } from '../modules/auth/firebase/auth'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { getAchievementDescription } from './useToast';
+import { getAchievementDescription } from '../modules/gamification/utils/achievementUtils';
 
 
 type Achievement = {
@@ -14,19 +14,6 @@ type Achievement = {
   dosezen: number;
 };
 
-export async function showAchievementInfo(achievementId: number){
-                let achievementDescription = await getAchievementDescription(achievementId)
-  
-                Toast.show({
-                  type: 'achievementInfoToast',
-                  props: {
-                    txt1: "Doseži: ",
-                    txt2: achievementDescription,
-                    txt3: require("../assets/icons/Bogomolke_icon.png"),
-                    onPress: () => {},
-                  },
-                });
-}
 
 export function useAchievements() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);

@@ -1,77 +1,82 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: '#A98467',
+    backgroundColor: "#A98467",
     borderRadius: 10,
     margin: 20,
     marginBottom: 0,
     padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'relative',
+    flexDirection: "row",
+    alignItems: "flex-start",
+    position: "relative",
     paddingTop: 35,
-    elevation: 10
+    elevation: 10,
   },
   containerDosezki: {
-    backgroundColor: '#A98467',
+    backgroundColor: "#A98467",
     borderRadius: 10,
     margin: 20,
     marginBottom: 0,
     paddingBottom: 10,
-    position: 'relative',
-    elevation: 10
+    position: "relative",
+    elevation: 10,
   },
   username: {
-    backgroundColor: '#6C584C',
-    color: '#F0EAD2',
-    fontSize: 16,
+    color: "#F0EAD2",
+    fontSize: 24,
     letterSpacing: 0.3,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 10,
-    fontWeight: 'bold',
-    alignSelf: 'flex-start',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    fontWeight: "bold",
+    alignSelf: "flex-start",
   },
   infoBox: {
-    backgroundColor: '#6C584C',
+    backgroundColor: "#6C584C",
     borderRadius: 10,
     padding: 16,
-    display:'flex',
-    marginLeft: 60,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    display: "flex",
+    flexDirection: "row",
+    gap: 40,
+    marginLeft: 90,
+    alignItems: "flex-end",
+    justifyContent: "flex-end",
+    elevation: 10,
+  },
+  infoBoxValues: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+    alignContent: "flex-end",
+  },
+  infoBoxLabels: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 15,
+        alignItems: "flex-end",
+  },
+  levelIcon: {
+    width: 70,
+    height: 80,
   },
   value: {
-    color: '#BC9143',
+    color: "#BC9143",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   label: {
-    color: '#F0EAD2',
+    color: "#F0EAD2",
     fontSize: 14,
     letterSpacing: 0.3,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
-  levelTag: {
-    position: 'absolute',
+  odjavaButton: {
+    position: "absolute",
     top: -12,
     right: 8,
-    backgroundColor: '#BC9143',
-    color: '#F0EAD2',
+    backgroundColor: "red",
+    color: "#F0EAD2",
     letterSpacing: 0.3,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 10,
@@ -79,23 +84,23 @@ export default StyleSheet.create({
   },
   logoutButton: {
     marginTop: 12,
-    backgroundColor: 'red',
+    backgroundColor: "red",
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 10,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   logoutText: {
     color: "#F0EAD2",
-    fontWeight: 'bold',
+    fontWeight: "bold",
     letterSpacing: 0.4,
-    fontSize: 16
+    fontSize: 16,
   },
   infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 4,
-    gap: 50
+    gap: 50,
   },
   heading: {
     fontSize: 20,
@@ -103,7 +108,7 @@ export default StyleSheet.create({
     margin: 10,
     paddingHorizontal: 10,
     color: "#F0EAD2",
-    letterSpacing: 0.3
+    letterSpacing: 0.3,
   },
   listContainer: {
     paddingHorizontal: 0,
@@ -117,7 +122,7 @@ export default StyleSheet.create({
     borderRadius: 8,
     width: 140,
     height: 120,
-    alignItems: 'center',
+    alignItems: "center",
     elevation: 10,
   },
   cardTitle: {
@@ -129,11 +134,11 @@ export default StyleSheet.create({
   achievementIcon: {
     width: 75,
     height: 75,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   profileContentContainer: {
     flex: 1,
-    backgroundColor: "#6C584C"
+    backgroundColor: "#6C584C",
   },
   starsWrapper: {
     flexDirection: "row",
@@ -141,6 +146,13 @@ export default StyleSheet.create({
   },
   starIcon: {
     width: 23,
-    height: 23
+    height: 23,
+  },
+  noAchievementsText: {
+    fontWeight: "bold",
+    color: "#F0EAD2",
+    fontSize: 16,
+    alignSelf: "center",
+    margin: 55,
   },
 });

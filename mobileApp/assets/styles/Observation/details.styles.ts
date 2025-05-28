@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
     width: 230,
     display: "flex",
     flexDirection: "column",
+    justifyContent: "space-between"
   },
   descriptionContainer: {
     backgroundColor: "#A98467",
@@ -59,12 +60,12 @@ export const styles = StyleSheet.create({
 
   },
   insectFamilyName: {
-    fontSize: 16,
+    fontSize: 12,
         color: "#F0EAD2" 
 
   },
   insectOrderName: {
-    fontSize: 16,
+    fontSize: 12,
         color: "#F0EAD2" 
 
   },
@@ -105,11 +106,19 @@ export const styles = StyleSheet.create({
     height: 60,
   },
   taxonomyTree: {
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center"
   },
+  taxonomyTextContainer: {
+    gap: 20,
+    flex: 1,
+    textWrap: "wrap",
+    width: "30%",
+  },
   arrowIcon: {
-    width: 50,
-    height: 60
+    width: 130,
+    height: 130,
   }
 });
