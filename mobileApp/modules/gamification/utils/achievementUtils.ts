@@ -30,12 +30,12 @@ export const getImageForAchievement = (naziv: string) => {
     "Prva žuželka": require("../../../assets/icons/Bogomolke_icon.png"),
     "Vsestranski opazovalec": require("../../../assets/icons/Dvokrilci_icon.png"),
     "Izkušen iskalec": require("../../../assets/icons/Hrošči_icon.png"),
-    Metuljkar: require("../../../assets/icons/Kačji pastirji_icon.png"),
+    "Metuljkar": require("../../../assets/icons/Kačji pastirji_icon.png"),
     "Ljubitelj hroščev": require("../../../assets/icons/Kobilice_icon.png"),
     "Kačji opazovalec": require("../../../assets/icons/Kožekrilci_icon.png"),
-    Znanstvenik: require("../../../assets/icons/Metulji_icon.png"),
+    "Znanstvenik": require("../../../assets/icons/Metulji_icon.png"),
     "Entomolog začetnik": require("../../../assets/icons/Polkrilci_icon.png"),
-    Opazovalec: require("../../../assets/icons/Polkrilci_icon.png"),
+    "Opazovalec": require("../../../assets/icons/Polkrilci_icon.png"),
   };
 
   return map[naziv] ?? require("../../../assets/icons/deny_icon.png");
