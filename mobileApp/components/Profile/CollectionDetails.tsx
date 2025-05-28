@@ -29,7 +29,7 @@ export default function CollectionDetails({ friendId }: Props) {
         userId = parseInt(localUserIdStr);
       }
 
-      console.log('📊 Prikazujem kolekcije za userId:', userId);
+      console.log('Prikazujem kolekcije za userId:', userId);
 
       const debug = db.getAllSync<any>(
         `SELECT TK_rod, TK_uporabnik FROM OPAZANJE WHERE TK_uporabnik = ?`,
