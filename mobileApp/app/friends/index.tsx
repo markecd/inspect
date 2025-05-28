@@ -1,9 +1,6 @@
-import { View } from "react-native"
+import React from 'react';
+import FriendList from '../../components/Profile/FriendList';
 
 export default function FriendsScreen() {
-    return (
-        <View>
-
-        </View>
-    )
+  return <FriendList />;
 }
