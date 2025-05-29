@@ -12,7 +12,7 @@ import { db as firestoreDb } from '../../modules/auth/firebase/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { openDatabase } from '@/services/database';
-import { syncFriendData } from '@/sync/syncFriendData';
+import { syncFriendData } from '@/services/syncService';
 
 export default function FriendList() {
   const [input, setInput] = useState('');

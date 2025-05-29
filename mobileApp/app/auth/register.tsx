@@ -31,17 +31,7 @@ export default function RegisterScreen() {
       });
 
       const localDb = await openDatabase();
-
-      const existingUser = localDb.getFirstSync(
-        `SELECT * FROM UPORABNIK WHERE username = ?`,
-        [username]
-      );
-  
-      if (existingUser) {
-        setError("Uporabniško ime je že zasedeno. Izberite drugo.");
-        return;
-      }
-
+      
       localDb.runSync(
         `INSERT INTO UPORABNIK (username, geslo, email, xp, level, firebase_uid) VALUES (?, ?, ?, ?, ?, ?)`,
         [username, password, email, 0, 1, user.uid]
