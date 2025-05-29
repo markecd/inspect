@@ -5,14 +5,12 @@ import { openDatabase } from "@/services/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function syncData() {
-      
   try {
     const dbLocal = await openDatabase();
     const localUserIdStr = await AsyncStorage.getItem("local_user_id");
     if (!localUserIdStr) return;
 
     const localUserId = parseInt(localUserIdStr);
-
 
     const result = dbLocal.getFirstSync<{ firebase_uid: string }>(
       "SELECT firebase_uid FROM UPORABNIK WHERE id = ?",
@@ -26,7 +24,6 @@ export async function syncData() {
 
     const firebaseUid = result.firebase_uid;
 
-    
     const userData = dbLocal.getFirstSync<any>(
       "SELECT username, email, xp, level FROM UPORABNIK WHERE id = ?",
       [localUserId]
@@ -42,7 +39,6 @@ export async function syncData() {
       });
     }
 
-   
     const achievements = dbLocal.getAllSync<any>(
       `SELECT d.id, d.naziv, d.opis, d.xp_vrednost
        FROM DOSEZEK d
@@ -83,15 +79,17 @@ export async function syncData() {
 }
 
 NetInfo.addEventListener(state => {
+  console.log("NetInfo state changed:", state);
   if (state.isConnected) {
+    console.log("Povezava vzpostavljena, začenjam sync...");
     syncData();
+    syncAllFriendsData();
   }
 });
 
 export async function syncFriendData(firebaseUid: string) {
   const db = await openDatabase();
 
-  
   const result = db.getFirstSync<any>(
     `SELECT id FROM UPORABNIK WHERE firebase_uid = ?`,
     [firebaseUid]
@@ -105,10 +103,10 @@ export async function syncFriendData(firebaseUid: string) {
   const localFriendId = result.id;
   console.log("Sinhroniziram podatke za localFriendId:", localFriendId);
 
- 
   const achievementsSnap = await getDocs(
     collection(firestoreDb, "users", firebaseUid, "achievements")
   );
+
   for (const docSnap of achievementsSnap.docs) {
     const a = docSnap.data();
     const achievementId = parseInt(docSnap.id);
@@ -118,13 +116,19 @@ export async function syncFriendData(firebaseUid: string) {
       [achievementId, a.naziv, a.opis, a.xp_vrednost]
     );
 
-    db.runSync(
-      `INSERT OR REPLACE INTO UPORABNIK_DOSEZEK (tk_uporabnik, tk_dosezek) VALUES (?, ?)`,
+    const exists = db.getFirstSync<any>(
+      `SELECT 1 FROM UPORABNIK_DOSEZEK WHERE tk_uporabnik = ? AND tk_dosezek = ?`,
       [localFriendId, achievementId]
     );
+
+    if (!exists) {
+      db.runSync(
+        `INSERT INTO UPORABNIK_DOSEZEK (tk_uporabnik, tk_dosezek) VALUES (?, ?)`,
+        [localFriendId, achievementId]
+      );
+    }
   }
 
-  
   const observationsSnap = await getDocs(
     collection(firestoreDb, "users", firebaseUid, "observations")
   );
@@ -144,37 +148,47 @@ export async function syncFriendData(firebaseUid: string) {
       [localFriendId]
     );
 
-    if (rodExists && uporabnikExists) {
+    const exists = db.getFirstSync<any>(
+      `SELECT 1 FROM OPAZANJE WHERE TK_rod = ? AND TK_uporabnik = ?`,
+      [o.TK_rod, localFriendId]
+    );
+
+    if (rodExists && uporabnikExists && !exists) {
       db.runSync(
         `INSERT INTO OPAZANJE (naziv, cas, lokacija, pot_slike, TK_rod, TK_uporabnik)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [
-          o.naziv,
-          o.cas,
-          o.lokacija,
-          '',
-          o.TK_rod,
-          localFriendId
-        ]
+        [o.naziv, o.cas, o.lokacija, '', o.TK_rod, localFriendId]
       );
-
-      console.log("Vstavljeno opažanje:", {
-        naziv: o.naziv,
-        TK_rod: o.TK_rod,
-        TK_uporabnik: localFriendId
-      });
-
       insertedCount++;
-    } else {
-      console.warn("Manjka ROD ali UPORABNIK za opažanje:", {
-        TK_rod: o.TK_rod,
-        TK_uporabnik: localFriendId,
-        rodExists,
-        uporabnikExists
-      });
     }
   }
 
   console.log(`Prijateljevi dosežki in opažanja sinhronizirani. Vstavljeno opažanj: ${insertedCount}`);
+}
 
+export async function syncAllFriendsData() {
+  try {
+    const db = await openDatabase();
+    const localUserIdStr = await AsyncStorage.getItem("local_user_id");
+    if (!localUserIdStr) return;
+    const localUserId = parseInt(localUserIdStr);
+
+    const friends = db.getAllSync<{ firebase_uid: string }>(
+      `SELECT u.firebase_uid
+       FROM UPORABNIK u
+       JOIN PRIJATELJSTVO p ON u.id = p.tk_uporabnik2
+       WHERE p.tk_uporabnik1 = ? AND u.firebase_uid IS NOT NULL`,
+      [localUserId]
+    );
+
+    console.log(`[syncAllFriendsData] Najdenih prijateljev za sync: ${friends.length}`);
+
+    for (const friend of friends) {
+      await syncFriendData(friend.firebase_uid);
+    }
+
+    console.log("[syncAllFriendsData] Sinhronizacija vseh prijateljev končana.");
+  } catch (error) {
+    console.error("[syncAllFriendsData] Napaka pri sinhronizaciji prijateljev:", error);
+  }
 }

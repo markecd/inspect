@@ -57,10 +57,10 @@ export const styles = StyleSheet.create({
     },
   
     empty: {
-      marginTop: 20,
+      marginTop: 10,
+      marginLeft: 5,
       fontStyle: 'italic',
-      textAlign: 'center',
-      color: '#888',
+      color: '#F0EAD2',
     },
   
     
