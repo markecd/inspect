@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { useEffect, useState, useRef } from "react";
 import { styles } from "../../assets/styles/Collection/collection.styles";
 import { openDatabase } from "@/services/database";
@@ -41,6 +41,8 @@ export default function RodPage() {
   }, []);
 
   return (
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={"height"}
+      keyboardVerticalOffset={110}>
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.rodContentContainer}>
         <View style={styles.rodNazivZuzelkeWrapper}>
@@ -68,7 +70,7 @@ export default function RodPage() {
               />
               <Text style={styles.dateLocationText}>{rod?.lokacija}</Text>
             </View>
-            <TouchableOpacity style={styles.askBuggyButton} onPress={() => router.push({pathname: '/collection/chat', params: {rodId: rodId}})}>
+            <TouchableOpacity style={styles.askBuggyButton} onPress={() => router.push({pathname: '/collection/chat', params: {rodId: rodId, rodNaziv: rod?.naziv_rodu}})}>
               <Text style={styles.askBuggyText}>Vprašaj Buggy-ja!</Text>
               <Image
                 source={require("../../assets/icons/Buggy_icon.png")}
@@ -101,5 +103,6 @@ export default function RodPage() {
       </ScrollView>
 
     </View>
+    </KeyboardAvoidingView>
   );
 }

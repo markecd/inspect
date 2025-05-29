@@ -36,7 +36,7 @@ export default StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 40,
-    marginLeft: 90,
+    marginLeft: 70,
     alignItems: "flex-end",
     justifyContent: "flex-end",
     elevation: 10,
@@ -52,6 +52,7 @@ export default StyleSheet.create({
     flexDirection: "column",
     gap: 15,
         alignItems: "flex-end",
+      
   },
   levelIcon: {
     width: 70,

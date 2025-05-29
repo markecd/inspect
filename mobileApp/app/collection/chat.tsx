@@ -9,7 +9,7 @@ import Markdown from 'react-native-markdown-display';
 
 
 export default function ChatPage() {
-const { rodId } = useLocalSearchParams();
+const { rodId, rodNaziv } = useLocalSearchParams();
 const [conversation, setConversation] = useState<Message[]>([]);
 const [newMessage, setNewMessage] = useState("");
 const [loading, setLoading] = useState(false);
@@ -37,12 +37,14 @@ const scrollViewRef = useRef<ScrollView>(null);
   const handleAddMessage = async () => {
         if (newMessage.trim() === "") return;
         setLoading(true);
-        const conversationWitAddedMessage: Message[] = [...conversation, createUserMessage(newMessage)];
+        const refinedMessage = `Za žuželko ${rodNaziv} odgovori v slovenščini odgovori na vprašanje: ${newMessage}`;
+        const conversationWitAddedMessage: Message[] = [...conversation, createUserMessage(refinedMessage)];
+        const actualConversation: Message[] = [...conversation, createUserMessage(newMessage)];
         setNewMessage("");
         textInputRef.current?.blur();
-        setConversation(conversationWitAddedMessage);
+        setConversation(actualConversation);
         const modelReply = await getModelResponse(conversationWitAddedMessage);
-        const finalConversation: Message[] = [...conversationWitAddedMessage, createAssistantMessage(modelReply)];
+        const finalConversation: Message[] = [...actualConversation, createAssistantMessage(modelReply)];
         setConversation(finalConversation);
         saveConversationToFirestore(Number(rodId), finalConversation);
         setLoading(false);
