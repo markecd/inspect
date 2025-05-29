@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { getDocs, collection, doc, deleteDoc, getDoc } from 'firebase/firestore';
 import { db as firestoreDb } from '../../modules/auth/firebase/config';
 import { auth } from '../../modules/auth/firebase/auth';
@@ -7,6 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { openDatabase } from '@/services/database';
 import { syncFriendData } from '../../services/syncService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../../assets/styles/Notifications/notifications-list.style'
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -49,7 +50,7 @@ export default function Notifications() {
       return;
     }
   
-  
+   
     const friendDocRef = doc(firestoreDb, 'users', notif.od_firebase_uid);
     const friendSnapshot = await getDoc(friendDocRef);
     if (!friendSnapshot.exists()) {
@@ -58,28 +59,26 @@ export default function Notifications() {
     }
     const friendData = friendSnapshot.data();
   
-    
+   
     db.runSync(
-      `INSERT OR REPLACE INTO UPORABNIK (username, geslo, email, xp, level, firebase_uid)
-       VALUES (?, ?, ?, ?, ?)`,
+      `INSERT OR IGNORE INTO UPORABNIK (username, geslo, email, xp, level, firebase_uid)
+       VALUES (?, ?, ?, ?, ?, ?)`,
       [
         notif.od_username,
-        "",
-        friendData.email || "",
-        notif.od_firebase_uid,
+        '',
+        '',
         friendData.xp || 0,
-        friendData.level || 1
+        friendData.level || 1,
+        notif.od_firebase_uid
       ]
     );
-    
   
-    
     db.runSync(
       `UPDATE UPORABNIK SET xp = ?, level = ? WHERE firebase_uid = ?`,
       [friendData.xp || 0, friendData.level || 1, notif.od_firebase_uid]
     );
   
-   
+    
     const result = db.getFirstSync<any>(
       `SELECT id FROM UPORABNIK WHERE firebase_uid = ?`,
       [notif.od_firebase_uid]
@@ -94,7 +93,7 @@ export default function Notifications() {
     
     await syncFriendData(notif.od_firebase_uid);
   
-    
+   
     const uid = auth.currentUser?.uid;
     if (uid) {
       await deleteDoc(doc(firestoreDb, "users", uid, "notifications", notif.id));
@@ -103,6 +102,7 @@ export default function Notifications() {
   
     console.log("Povabilo sprejeto in sinhronizirano.");
   };
+  
   
   
 
@@ -125,11 +125,16 @@ export default function Notifications() {
       ) : (
         notifications.map((notif) => (
           <View key={notif.id} style={styles.notification}>
-            <Text style={styles.text}>Prošnja za prijateljstvo od: <Text style={styles.bold}>{notif.od_username}</Text></Text>
+            <Text style={styles.text}>Prošnja za prijateljstvo od <Text style={styles.bold}>{notif.od_username}</Text></Text>
             <View style={styles.buttonRow}>
-              <Button title="Sprejmi" onPress={() => handleAcceptRequest(notif)} />
-              <Button title="Zavrni" color="#A44" onPress={() => handleDeclineRequest(notif)} />
-            </View>
+              <TouchableOpacity style={styles.customAccept} onPress={() => handleAcceptRequest(notif)}>
+                <Text style={styles.customButtonText}>Sprejmi</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.customDecline} onPress={() => handleDeclineRequest(notif)}>
+                <Text style={styles.customButtonText}>Zavrni</Text>
+              </TouchableOpacity>
+        </View>
+
           </View>
         ))
       )}
@@ -137,29 +142,3 @@ export default function Notifications() {
   );
 }
 
-const styles = StyleSheet.create({
-  notification: {
-    padding: 15,
-    marginVertical: 5,
-    backgroundColor: "#eee",
-    borderRadius: 8,
-    marginHorizontal: 10,
-  },
-  empty: {
-    padding: 20,
-    textAlign: 'center',
-    color: 'gray',
-  },
-  text: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  bold: {
-    fontWeight: 'bold',
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 10,
-  },
-});
