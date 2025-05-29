@@ -42,13 +42,6 @@ export default function Navbar() {
     
   }
 
-  const testLLM = async () => {
- 
-
-
-
-  }
-
   return (
     <View style={styles.container}>
       {tabs.map((tab, i) => (
