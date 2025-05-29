@@ -5,26 +5,42 @@ import { Asset } from 'expo-asset';
 const dbName = 'inspect.db';
 const dbPath = `${FileSystem.documentDirectory}${dbName}`;
 let dbInstance: SQLite.SQLiteDatabase | null = null;
+let initializing = false;
+let waiters: ((db: SQLite.SQLiteDatabase) => void)[] = [];
 
 export async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
     if (dbInstance) return dbInstance;
 
+      if (initializing) {
+    return new Promise((resolve) => waiters.push(resolve));
+  }
+  initializing = true;
+
+  try {
     const fileExists = await FileSystem.getInfoAsync(dbPath);
     if (!fileExists.exists) {
-        //console.log("🗑️ Brisanje obstoječe baze za prisilno kopiranje nove...");
-        //await FileSystem.deleteAsync(dbPath, { idempotent: true });  /*Če delaš spremembe v bazi to odkomentiraš da se posodobi, ker se more nova verzija kopirat*/
-      
-        console.log("Copying preloaded DB from assets...");
-        const asset = Asset.fromModule(require('../assets/inspect.db'));
-        await asset.downloadAsync();
-        await FileSystem.copyAsync({
+      console.log("📦 Copying preloaded DB from assets...");
+      const asset = Asset.fromModule(require('../assets/inspect.db'));
+      await asset.downloadAsync();
+      await FileSystem.copyAsync({
         from: asset.localUri!,
         to: dbPath,
-        });
+      });
     } else {
-        console.log("Database already exists, not copying again.");
+      console.log("Database already exists, not copying again.");
     }
 
     dbInstance = SQLite.openDatabaseSync(dbPath);
+    console.log("Database initialized");
+
+    waiters.forEach((resolve) => resolve(dbInstance!));
+    waiters = [];
+
     return dbInstance;
+  } catch (err) {
+    console.error("Error initializing database", err);
+    throw err;
+  } finally {
+    initializing = false;
+  }
 }

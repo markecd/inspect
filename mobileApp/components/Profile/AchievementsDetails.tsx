@@ -38,8 +38,6 @@ export default function AchievementsDetails({ friendId }: Props) {
         userId = parseInt(localUserIdStr);
       }
 
-      console.log('Prikazujem dosežke za userId:', userId);
-
       const result = db.getAllSync<any>(
         `SELECT d.*, ud.tk_uporabnik IS NOT NULL AS dosezen
          FROM DOSEZEK d
@@ -67,7 +65,7 @@ export default function AchievementsDetails({ friendId }: Props) {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text style={styles.heading}>🔄 Nalagam dosežene dosežke...</Text>
+        <Text style={styles.heading}>Nalagam dosežene dosežke...</Text>
       </View>
     );
   }

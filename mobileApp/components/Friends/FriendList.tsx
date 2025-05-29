@@ -6,12 +6,20 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native';
-import { getDocs, query, where, collection } from 'firebase/firestore';
+import {
+  getDocs,
+  query,
+  where,
+  collection,
+  doc,
+  addDoc,
+  serverTimestamp
+} from 'firebase/firestore';
 import { db as firestoreDb } from '../../modules/auth/firebase/config';
+import { auth } from '../../modules/auth/firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { openDatabase } from '@/services/database';
-import { syncFriendData } from '@/sync/syncFriendData';
 import { styles } from '../../assets/styles/Friends/friends-list.style';
 
 export default function FriendList() {
@@ -49,63 +57,84 @@ export default function FriendList() {
   const handleAddFriend = async () => {
     try {
       setError('');
-      const db = await openDatabase();
+  
+      
       const localUserIdStr = await AsyncStorage.getItem('local_user_id');
       if (!localUserIdStr) return;
       const localUserId = parseInt(localUserIdStr);
-
+  
+   
+      const localDb = await openDatabase();
+      const userData = localDb.getFirstSync<{ username: string }>(
+        "SELECT username FROM UPORABNIK WHERE id = ?",
+        [localUserId]
+      );
+  
+      if (!userData?.username) {
+        setError("Ni mogoče pridobiti uporabniškega imena.");
+        return;
+      }
+      const localUsername = userData.username;
+  
+      
+      const senderFirebaseUid = auth.currentUser?.uid;
+      if (!senderFirebaseUid) return;
+  
+     
       const q = query(
         collection(firestoreDb, 'users'),
         where('username', '==', input.trim())
       );
       const snapshot = await getDocs(q);
-
+  
       if (snapshot.empty) {
         setError('Uporabnik ne obstaja.');
         return;
       }
-
+  
       const friendDoc = snapshot.docs[0];
       const friendData = friendDoc.data();
       const friendUid = friendDoc.id;
-
+  
       if (!friendData.username) {
         setError('Podatki niso veljavni.');
         return;
       }
-
-      db.runSync(
-        `INSERT OR IGNORE INTO UPORABNIK (username, geslo, email, xp, level, firebase_uid)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [friendData.username, "", "", friendData.xp || 0, friendData.level || 1, friendUid]
+  
+    
+      const notifQuery = query(
+        collection(doc(firestoreDb, "users", friendUid), "notifications"),
+        where("tip", "==", "friend_request"),
+        where("od_username", "==", localUsername)
       );
-
-      const result = db.getFirstSync<any>(
-        `SELECT id FROM UPORABNIK WHERE firebase_uid = ?`,
-        [friendUid]
-      );
-
-      if (!result || !result.id) {
-        setError('Napaka pri lokalnem shranjevanju prijatelja.');
+      const existing = await getDocs(notifQuery);
+      if (!existing.empty) {
+        setError("Prošnja je že bila poslana.");
         return;
       }
-
-      const friendLocalId = result.id;
-
-      db.runSync(
-        `INSERT OR IGNORE INTO PRIJATELJSTVO (tk_uporabnik1, tk_uporabnik2)
-         VALUES (?, ?)`,
-        [localUserId, friendLocalId]
+  
+    
+      const notifRef = collection(
+        doc(firestoreDb, "users", friendUid),
+        "notifications"
       );
-
+  
+      await addDoc(notifRef, {
+        tip: "friend_request",
+        od: localUserId,
+        od_username: localUsername,
+        od_firebase_uid: senderFirebaseUid,
+        prebrano: false,
+        cas: serverTimestamp()
+      });
+  
       setInput('');
-      await syncFriendData(friendUid);
-      await loadFriends();
     } catch (err: any) {
       console.error('Napaka:', err);
-      setError(err.message || 'Napaka pri dodajanju prijatelja.');
+      setError(err.message || 'Napaka pri pošiljanju prošnje.');
     }
   };
+  
 
   const handleRemoveFriend = async (friendId: number) => {
     try {
@@ -113,28 +142,31 @@ export default function FriendList() {
       const localUserIdStr = await AsyncStorage.getItem('local_user_id');
       if (!localUserIdStr) return;
       const localUserId = parseInt(localUserIdStr);
-
+  
       db.runSync(
-        `DELETE FROM PRIJATELJSTVO WHERE tk_uporabnik1 = ? AND tk_uporabnik2 = ?`,
-        [localUserId, friendId]
+        `DELETE FROM PRIJATELJSTVO
+         WHERE (tk_uporabnik1 = ? AND tk_uporabnik2 = ?)
+            OR (tk_uporabnik1 = ? AND tk_uporabnik2 = ?)`,
+        [localUserId, friendId, friendId, localUserId]
       );
-
+  
       const drugePovezave = db.getFirstSync<any>(
         `SELECT 1 FROM PRIJATELJSTVO WHERE tk_uporabnik2 = ? OR tk_uporabnik1 = ? LIMIT 1`,
         [friendId, friendId]
       );
-
+  
       if (!drugePovezave) {
         db.runSync(`DELETE FROM OPAZANJE WHERE TK_uporabnik = ?`, [friendId]);
         db.runSync(`DELETE FROM UPORABNIK_DOSEZEK WHERE TK_uporabnik = ?`, [friendId]);
         db.runSync(`DELETE FROM UPORABNIK WHERE id = ?`, [friendId]);
       }
-
+  
       await loadFriends();
     } catch (err) {
       console.error("Napaka pri odstranitvi prijatelja:", err);
     }
   };
+  
 
   useEffect(() => {
     loadFriends();
@@ -182,8 +214,9 @@ export default function FriendList() {
           </View>
         ))
       )}
-
+       <Text style={styles.empty}>Pošlji prošnjo za prijateljstvo</Text>
       <View style={styles.addFriendBox}>
+        
         <TextInput
           value={input}
           onChangeText={setInput}
@@ -191,7 +224,7 @@ export default function FriendList() {
           style={styles.input}
         />
         <TouchableOpacity style={styles.customButton} onPress={handleAddFriend}>
-          <Text style={styles.customButtonText}>Dodaj</Text>
+          <Text style={styles.customButtonText}>Pošlji</Text>
         </TouchableOpacity>
       </View>
 

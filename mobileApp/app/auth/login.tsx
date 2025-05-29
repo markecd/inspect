@@ -39,6 +39,7 @@ export default function LoginScreen() {
       }
 
       await AsyncStorage.setItem("local_user_id", result.id.toString());
+      await AsyncStorage.setItem("user_firestore_id", user.uid);
       router.push("/observation");
     } catch (err: any) {
       setError(err.message);
