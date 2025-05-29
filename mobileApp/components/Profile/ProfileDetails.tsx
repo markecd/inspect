@@ -43,7 +43,7 @@ export default function ProfileDetails({ friendId }: Props) {
         }
 
         const result = db.getFirstSync<any>(
-          `SELECT u.username, u.level, u.xp, COUNT(ud.id) as dosezki, COUNT(o.id) as opazanja 
+          `SELECT u.username, u.level, u.xp, COUNT(DISTINCT ud.id) as dosezki, COUNT(DISTINCT o.id) as opazanja 
            FROM UPORABNIK u
            LEFT JOIN UPORABNIK_DOSEZEK ud ON u.id = ud.tk_uporabnik
            LEFT JOIN OPAZANJE o ON u.id = o.TK_uporabnik

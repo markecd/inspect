@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { styles } from "../../assets/styles/Collection/collection.styles";
 import { openDatabase } from "@/services/database";
 import { ScrollView } from "react-native-gesture-handler";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import Comments from "@/components/Observation/Comments";
 
 type InsectDataRow = {
@@ -68,7 +68,7 @@ export default function RodPage() {
               />
               <Text style={styles.dateLocationText}>{rod?.lokacija}</Text>
             </View>
-            <TouchableOpacity style={styles.askBuggyButton}>
+            <TouchableOpacity style={styles.askBuggyButton} onPress={() => router.push({pathname: '/collection/chat', params: {rodId: rodId}})}>
               <Text style={styles.askBuggyText}>Vprašaj Buggy-ja!</Text>
               <Image
                 source={require("../../assets/icons/Buggy_icon.png")}

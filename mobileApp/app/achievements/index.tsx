@@ -15,7 +15,7 @@ export default function AchievementScreen() {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>🔄 Nalagam dosežke...</Text>
+        <Text>Nalagam dosežke...</Text>
       </View>
     );
   }
