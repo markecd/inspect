@@ -7,8 +7,19 @@ import { Stack, usePathname } from "expo-router";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast, { ToastProps } from "react-native-toast-message";
+import { useEffect } from "react";
+import NetInfo from "@react-native-community/netinfo";
+import { syncData } from "@/services/syncService";
+import { registerBackgroundSync } from '@/services/backgroundSync';
+
+
 
 export default function RootLayout() {
+  
+    useEffect(() => {
+      registerBackgroundSync(); 
+    }, []);
+
   const pathname = usePathname();
   const hideNavbarOn = [
     "/auth/login",

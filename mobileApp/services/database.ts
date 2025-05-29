@@ -19,7 +19,7 @@ export async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
   try {
     const fileExists = await FileSystem.getInfoAsync(dbPath);
     if (!fileExists.exists) {
-      console.log("📦 Copying preloaded DB from assets...");
+      console.log("Copying preloaded DB from assets...");
       const asset = Asset.fromModule(require('../assets/inspect.db'));
       await asset.downloadAsync();
       await FileSystem.copyAsync({
