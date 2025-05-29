@@ -3,7 +3,7 @@ import ProfileDetails from '@/components/Profile/ProfileDetails';
 import AchievementsDetails from '@/components/Profile/AchievementsDetails';
 import styles from '../../assets/styles/Profile/profile-details.style';
 import CollectionDetails from '@/components/Profile/CollectionDetails';
-import FriendList from '@/components/Profile/FriendList';
+import FriendList from '@/components/Friends/FriendList';
 import { useLocalSearchParams } from 'expo-router';
 
 

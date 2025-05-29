@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function ProfileDetails({ friendId }: Props) {
-  const [user, setUser] = useState<any>(null);;
+  const [user, setUser] = useState<any>(null);
 
   const handleLogout = async () => {
     try {
@@ -74,9 +74,10 @@ export default function ProfileDetails({ friendId }: Props) {
 
   return (
     <View style={styles.container}>
+      {!friendId && ( 
       <TouchableOpacity onPress={handleLogout} style={styles.odjavaButton}>
         <Text style={styles.logoutText}>Odjava</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>)}
       <View
         style={{
           display: "flex",
