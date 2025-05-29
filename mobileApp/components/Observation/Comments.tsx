@@ -127,7 +127,6 @@ export default function Comments({ observationId }: Props) {
       if (status.isLoaded && status.didJustFinish) {
         setIsPlaying(false);
         sound.unloadAsync();
-        console.log(isPlaying);
       }
     });
     await sound.playAsync();
