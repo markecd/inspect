@@ -97,7 +97,7 @@ export default function ProfileDetails({ friendId }: Props) {
         </View>
         <View style={styles.infoBoxLabels}>
           <Text style={styles.label}>opažanj</Text>
-          <Text style={styles.label}>xp</Text>
+          <Text style={styles.label}>točk</Text>
           <Text style={styles.label}>dosežkov</Text>
         </View>
       </View>
