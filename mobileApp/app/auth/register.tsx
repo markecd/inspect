@@ -52,7 +52,7 @@ export default function RegisterScreen() {
       <TextInput placeholderTextColor="#F0EAD2" placeholder="Uporabniško ime" value={username} onChangeText={setUsername} style={styles.input} />
       <TextInput placeholderTextColor="#F0EAD2" placeholder="Geslo" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
-              <Text style={styles.buttonText}>Prijava</Text>
+              <Text style={styles.buttonText}>Registracija</Text>
       </TouchableOpacity>
       <Link style={styles.link} href="/auth/login">Že imate narejen račun? Kliknite tukaj!</Link>
       {error ? <Text style={styles.error}>{error}</Text> : null}

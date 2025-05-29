@@ -112,8 +112,12 @@ export async function syncFriendData(firebaseUid: string) {
     const achievementId = parseInt(docSnap.id);
 
     db.runSync(
-      `INSERT OR REPLACE INTO DOSEZEK (id, naziv, opis, xp_vrednost) VALUES (?, ?, ?, ?)`,
-      [achievementId, a.naziv, a.opis, a.xp_vrednost]
+      `INSERT OR IGNORE INTO DOSEZEK (id, naziv, xp_vrednost, opis) VALUES (?, ?, ?, ?)`,
+      [achievementId, a.naziv, a.xp_vrednost, a.opis]
+    );
+    db.runSync(
+      `UPDATE DOSEZEK SET naziv = ?, xp_vrednost = ?, opis = ? WHERE id = ?`,
+      [a.naziv, a.xp_vrednost, a.opis, achievementId]
     );
 
     const exists = db.getFirstSync<any>(
@@ -155,9 +159,9 @@ export async function syncFriendData(firebaseUid: string) {
 
     if (rodExists && uporabnikExists && !exists) {
       db.runSync(
-        `INSERT INTO OPAZANJE (naziv, cas, lokacija, pot_slike, TK_rod, TK_uporabnik)
+        `INSERT INTO OPAZANJE (naziv, lokacija, cas, pot_slike, TK_uporabnik, TK_rod)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [o.naziv, o.cas, o.lokacija, '', o.TK_rod, localFriendId]
+        [o.naziv, o.lokacija, o.cas, '',localFriendId, o.TK_rod]
       );
       insertedCount++;
     }
