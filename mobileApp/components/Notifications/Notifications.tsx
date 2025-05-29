@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { getDocs, collection, doc, deleteDoc } from 'firebase/firestore';
+import { getDocs, collection, doc, deleteDoc, getDoc } from 'firebase/firestore';
 import { db as firestoreDb } from '../../modules/auth/firebase/config';
 import { auth } from '../../modules/auth/firebase/auth';
 import { ScrollView } from "react-native-gesture-handler";
@@ -43,44 +43,68 @@ export default function Notifications() {
     const localUserIdStr = await AsyncStorage.getItem("local_user_id");
     if (!localUserIdStr) return;
     const localUserId = parseInt(localUserIdStr);
-
+  
+    if (!notif.od_firebase_uid) {
+      console.warn("Povabilo brez Firebase UID. Ne morem sprejeti.");
+      return;
+    }
+  
+  
+    const friendDocRef = doc(firestoreDb, 'users', notif.od_firebase_uid);
+    const friendSnapshot = await getDoc(friendDocRef);
+    if (!friendSnapshot.exists()) {
+      console.warn("Ni mogoče pridobiti podatkov o prijatelju iz Firestore.");
+      return;
+    }
+    const friendData = friendSnapshot.data();
+  
     
     db.runSync(
-      `INSERT OR IGNORE INTO UPORABNIK (username, firebase_uid, xp, level)
-       VALUES (?, ?, ?, ?)`,
-      [notif.od_username, notif.od_firebase_uid || "", 0, 1]
+      `INSERT OR REPLACE INTO UPORABNIK (username, geslo, email, xp, level, firebase_uid)
+       VALUES (?, ?, ?, ?, ?)`,
+      [
+        notif.od_username,
+        "",
+        friendData.email || "",
+        notif.od_firebase_uid,
+        friendData.xp || 0,
+        friendData.level || 1
+      ]
     );
-
+    
+  
+    
+    db.runSync(
+      `UPDATE UPORABNIK SET xp = ?, level = ? WHERE firebase_uid = ?`,
+      [friendData.xp || 0, friendData.level || 1, notif.od_firebase_uid]
+    );
+  
+   
     const result = db.getFirstSync<any>(
-      `SELECT id FROM UPORABNIK WHERE username = ?`,
-      [notif.od_username]
+      `SELECT id FROM UPORABNIK WHERE firebase_uid = ?`,
+      [notif.od_firebase_uid]
     );
     const friendLocalId = result?.id;
     if (!friendLocalId) return;
-
- 
-    db.runSync(`
-      INSERT OR IGNORE INTO PRIJATELJSTVO (tk_uporabnik1, tk_uporabnik2)
-      VALUES (?, ?)`,
-      [localUserId, friendLocalId]);
-
-    db.runSync(`
-      INSERT OR IGNORE INTO PRIJATELJSTVO (tk_uporabnik1, tk_uporabnik2)
-      VALUES (?, ?)`,
-      [friendLocalId, localUserId]);
-
-    
-    if (notif.od_firebase_uid) {
-      await syncFriendData(notif.od_firebase_uid);
-    }
-
   
+   
+    db.runSync(`INSERT OR IGNORE INTO PRIJATELJSTVO (tk_uporabnik1, tk_uporabnik2) VALUES (?, ?)`, [localUserId, friendLocalId]);
+    db.runSync(`INSERT OR IGNORE INTO PRIJATELJSTVO (tk_uporabnik1, tk_uporabnik2) VALUES (?, ?)`, [friendLocalId, localUserId]);
+  
+    
+    await syncFriendData(notif.od_firebase_uid);
+  
+    
     const uid = auth.currentUser?.uid;
     if (uid) {
       await deleteDoc(doc(firestoreDb, "users", uid, "notifications", notif.id));
       await loadNotifications();
     }
+  
+    console.log("Povabilo sprejeto in sinhronizirano.");
   };
+  
+  
 
   const handleDeclineRequest = async (notif: any) => {
     const uid = auth.currentUser?.uid;
