@@ -91,10 +91,4 @@ export async function syncFriendData(firebaseUid: string) {
 
   console.log(`Prijateljevi dosežki in opažanja sinhronizirani. Vstavljeno opažanj: ${insertedCount}`);
 
-
-  const allObs = db.getAllSync<any>(
-    `SELECT * FROM OPAZANJE WHERE TK_uporabnik = ?`,
-    [localFriendId]
-  );
-  console.log("Trenutna opažanja za userId", localFriendId, ":", allObs);
 }

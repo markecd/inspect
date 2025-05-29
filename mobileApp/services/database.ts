@@ -14,7 +14,7 @@ export async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
         //console.log("🗑️ Brisanje obstoječe baze za prisilno kopiranje nove...");
         //await FileSystem.deleteAsync(dbPath, { idempotent: true });  /*Če delaš spremembe v bazi to odkomentiraš da se posodobi, ker se more nova verzija kopirat*/
       
-        console.log("📦 Copying preloaded DB from assets...");
+        console.log("Copying preloaded DB from assets...");
         const asset = Asset.fromModule(require('../assets/inspect.db'));
         await asset.downloadAsync();
         await FileSystem.copyAsync({
@@ -22,7 +22,7 @@ export async function openDatabase(): Promise<SQLite.SQLiteDatabase> {
         to: dbPath,
         });
     } else {
-        console.log("✅ Database already exists, not copying again.");
+        console.log("Database already exists, not copying again.");
     }
 
     dbInstance = SQLite.openDatabaseSync(dbPath);

@@ -3,9 +3,8 @@ import {
   View,
   Text,
   TextInput,
-  Button,
-  StyleSheet,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import { getDocs, query, where, collection } from 'firebase/firestore';
 import { db as firestoreDb } from '../../modules/auth/firebase/config';
@@ -13,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { openDatabase } from '@/services/database';
 import { syncFriendData } from '@/sync/syncFriendData';
+import { styles } from '../../assets/styles/Friends/friends-list.style';
 
 export default function FriendList() {
   const [input, setInput] = useState('');
@@ -32,7 +32,8 @@ export default function FriendList() {
         `SELECT f.id AS id, f.username, f.level, f.xp
          FROM UPORABNIK f
          INNER JOIN PRIJATELJSTVO p ON f.id = p.tk_uporabnik2
-         WHERE p.tk_uporabnik1 = ?`,
+         WHERE p.tk_uporabnik1 = ?
+         ORDER BY f.xp DESC`,
         [localUserId]
       );
 
@@ -124,7 +125,6 @@ export default function FriendList() {
       );
 
       if (!drugePovezave) {
-        
         db.runSync(`DELETE FROM OPAZANJE WHERE TK_uporabnik = ?`, [friendId]);
         db.runSync(`DELETE FROM UPORABNIK_DOSEZEK WHERE TK_uporabnik = ?`, [friendId]);
         db.runSync(`DELETE FROM UPORABNIK WHERE id = ?`, [friendId]);
@@ -140,14 +140,19 @@ export default function FriendList() {
     loadFriends();
   }, []);
 
+  const getMedal = (index: number) => {
+    if (index === 0) return require('../../assets/icons/gold_medal.png');
+    if (index === 1) return require('../../assets/icons/silver_medal.png');
+    if (index === 2) return require('../../assets/icons/bronze_medal.png');
+    return null;
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Prijatelji</Text>
-
       {friends.length === 0 ? (
         <Text style={styles.empty}>Ni prijateljev</Text>
       ) : (
-        friends.map((item) => (
+        friends.map((item, index) => (
           <View key={item.id} style={styles.friendItem}>
             <TouchableOpacity
               onPress={() =>
@@ -156,14 +161,23 @@ export default function FriendList() {
                   params: { id: item.id.toString() },
                 })
               }
+              style={styles.friendInfo}
             >
-              <Text style={styles.friendName}>{item.username}</Text>
+              <View style={styles.nameWithMedal}>
+                {getMedal(index) && (
+                  <Image source={getMedal(index)!} style={styles.medalIcon} />
+                )}
+                <Text style={styles.friendName}>{item.username}</Text>
+              </View>
               <Text style={styles.friendMeta}>
                 Level {item.level} | XP {item.xp}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleRemoveFriend(item.id)}>
-              <Text style={styles.removeText}>❌</Text>
+              <Image
+                source={require('../../assets/icons/deny_icon.png')}
+                style={styles.removeIcon}
+              />
             </TouchableOpacity>
           </View>
         ))
@@ -173,45 +187,15 @@ export default function FriendList() {
         <TextInput
           value={input}
           onChangeText={setInput}
-          placeholder="Dodaj prijatelja (username)"
+          placeholder="Uporabniško ime"
           style={styles.input}
         />
-        <Button title="Dodaj" onPress={handleAddFriend} />
+        <TouchableOpacity style={styles.customButton} onPress={handleAddFriend}>
+          <Text style={styles.customButtonText}>Dodaj</Text>
+        </TouchableOpacity>
       </View>
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { padding: 20, flex: 1 },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
-  friendItem: {
-    padding: 12,
-    backgroundColor: '#f1f1f1',
-    borderRadius: 8,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  friendName: { fontSize: 18 },
-  friendMeta: { fontSize: 14, color: '#555' },
-  removeText: { fontSize: 18, color: 'red', marginLeft: 10 },
-  empty: { marginTop: 20, fontStyle: 'italic', color: '#888' },
-  addFriendBox: {
-    flexDirection: 'row',
-    gap: 10,
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 10,
-  },
-  error: { color: 'red', marginTop: 10 },
-});
