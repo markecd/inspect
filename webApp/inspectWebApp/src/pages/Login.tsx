@@ -3,9 +3,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config";
 import '../assets/styles/login.css'
 import splashIcon from '../assets/images/splash-icon.png';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
