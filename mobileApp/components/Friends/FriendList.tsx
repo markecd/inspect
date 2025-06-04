@@ -13,7 +13,8 @@ import {
   collection,
   doc,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  deleteDoc
 } from 'firebase/firestore';
 import { db as firestoreDb } from '../../modules/auth/firebase/config';
 import { auth } from '../../modules/auth/firebase/auth';
@@ -159,6 +160,18 @@ export default function FriendList() {
         db.runSync(`DELETE FROM OPAZANJE WHERE TK_uporabnik = ?`, [friendId]);
         db.runSync(`DELETE FROM UPORABNIK_DOSEZEK WHERE TK_uporabnik = ?`, [friendId]);
         db.runSync(`DELETE FROM UPORABNIK WHERE id = ?`, [friendId]);
+      }
+
+      const currentUid = auth.currentUser?.uid;
+
+      const friendFirebaseUid = db.getFirstSync<any>(
+        `SELECT firebase_uid FROM UPORABNIK WHERE id = ?`,
+        [friendId]
+      )?.firebase_uid;
+
+      if (currentUid && friendFirebaseUid) {
+        await deleteDoc(doc(firestoreDb, "users", currentUid, "friends", friendFirebaseUid));
+        await deleteDoc(doc(firestoreDb, "users", friendFirebaseUid, "friends", currentUid));
       }
   
       await loadFriends();
