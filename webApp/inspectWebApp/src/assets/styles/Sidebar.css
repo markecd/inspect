@@ -1,0 +1,125 @@
+.sidebarContentContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.filterContainer {
+  height: 20%;
+}
+
+.analyticsContainer {
+  height: 40%;
+}
+
+.observationDetailsContainer {
+  height: 40%;
+  position: fixed;
+  width: 375px;
+  bottom: 0%;
+}
+
+.tabsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  justify-content: center;
+  padding: 20px;
+  align-items: center;
+}
+
+.tab {
+  all: unset;
+  position: relative;
+  font-weight: bold;
+  padding-bottom: 4px;
+  transition: color 0.3s;
+  background: transparent;
+}
+
+.tab:hover {
+  cursor: pointer;
+}
+
+.tab::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background-color: white;
+  transition: width 0.3s ease-in-out;
+}
+
+.tab.active::after {
+  width: 100%;
+}
+
+.tabSeperator {
+  font-size: 40px;
+  cursor: default;
+}
+
+.detailsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: top;
+}
+
+.observationImage {
+  width: 120px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.detailsWrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+.insectName {
+  margin: 0;
+}
+.insectLatinName {
+  margin: 0;
+  font-style: italic;
+}
+.observationOwner {
+}
+.observationDate {
+}
+.observationLocation {
+}
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  overflow-y: auto;
+  margin-top: 5px;
+}
+
+.description {
+  font-size: 10px;
+}
+
+.filterWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+  align-items: center;
+}
+
+.filterInput{
+    width: 80%;
+}
+
+select.filterInput:hover{
+    cursor: pointer;
+}
+.filterButton{
+    width: 100px;
+}
