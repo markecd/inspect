@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { db } from '../firebase/config';
-import { auth } from '../firebase/config';
+import { db } from '../services/firebase/config';
+import { auth } from '../services/firebase/config';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { doc, getDoc } from 'firebase/firestore';
 import '../assets/styles/add-article.css';
 
 
-const AddArticle = () => {
+function AddArticle(){
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
