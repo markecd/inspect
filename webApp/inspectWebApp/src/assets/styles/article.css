@@ -1,0 +1,32 @@
+
+  .article-card {
+    width: 23.8%; 
+    box-sizing: border-box;
+    min-height: 200px;
+    transition: 0.2s;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+      
+  .article-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .article-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .article-meta {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.75rem;
+  }
+  
+  .article-content {
+    font-size: 1rem;
+    color: #333;
+  }
+  
