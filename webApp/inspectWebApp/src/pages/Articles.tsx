@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { collectionGroup, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { db } from '../services/firebase/config';
 import Article from '../components/Article/Article';
 import '../assets/styles/articles.css';
 
@@ -12,7 +12,7 @@ interface ArticleData {
   username: string;
 }
 
-const Articles: React.FC = () => {
+function Articles(){
   const [articles, setArticles] = useState<ArticleData[]>([]);
 
   useEffect(() => {
