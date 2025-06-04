@@ -5,24 +5,30 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: black;
   }
       
   
   .article-title {
-    font-size: 1.2rem;
+    font-size: 10px;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    text-align: center;
   }
   
   .article-meta {
     font-size: 0.9rem;
     color: #666;
   }
-  
-  .article-content {
-    font-size: 1rem;
-    color: #333;
-  }
 
+
+  .article-image {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+  
   
   
