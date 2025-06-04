@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { getDocs, collection, doc, deleteDoc, getDoc } from 'firebase/firestore';
+import { getDocs, collection, doc, deleteDoc, getDoc, setDoc } from 'firebase/firestore';
 import { db as firestoreDb } from '../../modules/auth/firebase/config';
 import { auth } from '../../modules/auth/firebase/auth';
 import { ScrollView } from "react-native-gesture-handler";
@@ -8,6 +8,7 @@ import { openDatabase } from '@/services/database';
 import { syncFriendData } from '../../services/syncService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../assets/styles/Notifications/notifications-list.style'
+import { syncFriendList } from '@/services/syncFriendList';
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -90,8 +91,24 @@ export default function Notifications() {
     db.runSync(`INSERT OR IGNORE INTO PRIJATELJSTVO (tk_uporabnik1, tk_uporabnik2) VALUES (?, ?)`, [localUserId, friendLocalId]);
     db.runSync(`INSERT OR IGNORE INTO PRIJATELJSTVO (tk_uporabnik1, tk_uporabnik2) VALUES (?, ?)`, [friendLocalId, localUserId]);
   
+    const requestSenderUid = notif.od_firebase_uid;
+    const currentUid = auth.currentUser?.uid;
+
+      if (requestSenderUid && currentUid) {
+        await setDoc(doc(firestoreDb, "users", requestSenderUid, "friends", currentUid), {
+          status: "accepted",
+          timestamp: Date.now()
+        });
+
+        await setDoc(doc(firestoreDb, "users", currentUid, "friends", requestSenderUid), {
+          status: "accepted",
+          timestamp: Date.now()
+        });
+      }
     
     await syncFriendData(notif.od_firebase_uid);
+
+    await syncFriendList();
   
    
     const uid = auth.currentUser?.uid;
