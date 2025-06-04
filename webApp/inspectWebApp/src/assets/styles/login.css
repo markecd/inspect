@@ -42,6 +42,10 @@
     border-radius: 4px;
     cursor: pointer;
   }
+
+  .login-button:hover {
+    background-color: #d7e495;
+  }
   
   .login-button:disabled {
     background-color: #aaa;

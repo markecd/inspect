@@ -30,10 +30,10 @@ const Article: React.FC<ArticleProps> = ({ title, content, username, createdAt }
   return (
     <div className="article-card">
       <h3 className="article-title">{title}</h3>
-      <p className="article-meta">
-        Objavil: <strong>{username || 'Neznano'}</strong> | {formatDate(createdAt)}
-      </p>
       <p className="article-content">{content}</p>
+      <div className="article-meta">
+      <strong>{username || 'Neznano'}</strong> | {formatDate(createdAt)}
+      </div>
     </div>
   );
 };

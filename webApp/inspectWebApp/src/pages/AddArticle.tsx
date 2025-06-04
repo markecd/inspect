@@ -3,6 +3,7 @@ import { db } from '../firebase/config';
 import { auth } from '../firebase/config';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { doc, getDoc } from 'firebase/firestore';
+import '../assets/styles/add-article.css';
 
 
 const AddArticle = () => {
@@ -58,34 +59,34 @@ const AddArticle = () => {
   
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Dodaj nov članek</h2>
+    <div className="add-article-container">
+    <h2 className="add-article-title">Dodaj nov članek</h2>
 
-      <input
-        type="text"
-        placeholder="Naslov"
-        className="w-full p-2 border rounded mb-4"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+    <input
+      type="text"
+      placeholder="Naslov"
+      className="add-article-input"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+    />
 
-      <textarea
-        placeholder="Vsebina članka..."
-        className="w-full p-2 border rounded mb-4 h-40"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
+    <textarea
+      placeholder="Vsebina članka..."
+      className="add-article-textarea"
+      value={content}
+      onChange={(e) => setContent(e.target.value)}
+    />
 
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        {loading ? 'Shranjujem...' : 'Shrani članek'}
-      </button>
+    <button
+      onClick={handleSubmit}
+      disabled={loading}
+      className="add-article-button"
+    >
+      {loading ? 'Shranjujem...' : 'Shrani članek'}
+    </button>
 
-      {message && <p className="mt-4 text-center">{message}</p>}
-    </div>
+    {message && <p className="add-article-message">{message}</p>}
+  </div>
   );
 };
 
