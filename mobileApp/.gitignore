@@ -2,6 +2,10 @@
 
 .env
 
+#SonarQube
+sonar-project.properties
+.sonar_lock
+report-task.txt
 # dependencies
 node_modules/
 
