@@ -55,8 +55,8 @@ function Details(props: DetailsProps) {
         </div>
       </div>
     </div>
+    <p className="taxonomy">{redCodeToNameMap[red] + "->" + druzina}</p>
     <div className="infoContainer">
-        <p>{redCodeToNameMap[red] + "->" + druzina}</p>
         <p className="description">{description}</p>
     </div>
     </div>

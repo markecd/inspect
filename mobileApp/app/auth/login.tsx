@@ -48,10 +48,27 @@ export default function LoginScreen() {
       const level = result.level;
       setStats({ xp , progress: xp % 250, levelUp: false, level: level})
       router.push("/observation");
+      resetNajdeno(result!.id);
     } catch (err: any) {
       setError(err.message);
     }
   };
+
+  async function resetNajdeno(userId: number){
+          const db = await openDatabase();
+      db.runSync(
+        `UPDATE ROD SET najdeno = 0 WHERE id NOT IN (SELECT TK_rod FROM OPAZANJE WHERE TK_uporabnik = ?)`,
+        [userId]
+      );
+        db.runSync(
+    `UPDATE ROD 
+     SET najdeno = 1 
+     WHERE id IN (
+       SELECT TK_rod FROM OPAZANJE WHERE TK_uporabnik = ? AND TK_rod IS NOT NULL
+     )`,
+    [userId]
+  );
+  }
 
   return (
     <View style={styles.container}>

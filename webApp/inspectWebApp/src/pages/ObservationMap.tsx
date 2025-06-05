@@ -2,7 +2,7 @@ import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
 import "../assets/styles/ObservationMap.css";
 import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
-import { getUserFriendsObservations, getUserObservations } from "../services/firebase/firestoreService";
+import { getAllObservations, getUserFriendsObservations, getUserObservations } from "../services/firebase/firestoreService";
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const mapId = import.meta.env.VITE_MAP_ID;
 console.log(mapId);
@@ -15,6 +15,7 @@ export type Observation = {
   TK_rod: number;
   LLMConversation?: { role: string; content: string }[] | null;
   position: { lat: number; lng: number };
+  image_path: string;
 };
 
 function ObservationMap() {
@@ -49,7 +50,7 @@ function ObservationMap() {
         }
 
         let observationsReturned;
-        if(selected == "Vsi") observationsReturned = /*await getAllObservations()*/ await getUserFriendsObservations(userId);
+        if(selected == "Vsi") observationsReturned = await getAllObservations();
         else if(selected == "Prijatelji") observationsReturned = await getUserFriendsObservations(userId);
         else observationsReturned = await getUserObservations(userId);
         setObservations(observationsReturned!);
@@ -72,6 +73,7 @@ function ObservationMap() {
           <Sidebar selectedObservation={selectedObservation!} selectView={setView}/>
         </div>
         <div className="mapContainer">
+          {location &&  
           <Map
             zoom={zoom}
             onZoomChanged={(event) => setZoom(event.detail.zoom)}
@@ -86,11 +88,12 @@ function ObservationMap() {
                   className="mapMarker"
                   onClick={() => setSelectedObservation(item)}
                 >
-                  <img className="mapMarkerImage" src={image} />
+                  <img className="mapMarkerImage" src={item.image_path} />
                 </div>
               </AdvancedMarker>
             ))}
           </Map>
+}
         </div>
       </div>
     </APIProvider>

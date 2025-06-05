@@ -44,13 +44,13 @@ function Sidebar({selectedObservation, selectView}: SidebarProps) {
       <div className="observationDetailsContainer">
         {selectedObservation ? 
         <Details 
-          imageURL={"https://www.urbanatura.si/data/galerija/5bed4071308fc9cc9a0b606d5a6f40a22ddf116a/31623837306Dorcus_8.JPG"} 
+          imageURL={selectedObservation.image_path} 
           insectId={selectedObservation.TK_rod.toString()}
           observationOwner={selectedObservation.username!}
           observationDate={selectedObservation.cas}
           observationLocation={selectedObservation.position.lat.toString()} 
         />
-          : <p>Nobeno opažanje ni izbrano</p>
+          : <p className="noneSelected">Nobeno opažanje ni izbrano</p>
        }
         </div>
     </div>

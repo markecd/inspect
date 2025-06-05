@@ -7,6 +7,7 @@ import { openDatabase } from "@/services/database";
 import { ScrollView } from "react-native-gesture-handler";
 import { useLocalSearchParams } from "expo-router";
 import DruzinaSection from "@/components/Collection/DruzinaSection";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type InsectsOfRedRow = {
   id: number;
@@ -39,16 +40,17 @@ export default function RedPage() {
       try {
         const db = await openDatabase();
         const redId = map[red as string];
+        const localUserId = Number(await AsyncStorage.getItem("local_user_id"));
         const result = await db.getAllAsync<InsectsOfRedRow>(
           `
                         SELECT r.id, r.naziv_rodu, r.najdeno, r.nahajalisce_rodu, d.naziv_druzine, o.lokacija, o.cas, o.pot_slike
                         FROM ROD r 
-                        LEFT JOIN OPAZANJE o ON r.id = o.TK_rod
+                        LEFT JOIN OPAZANJE o ON r.id = o.TK_rod AND o.TK_uporabnik = ?
                         LEFT JOIN DRUZINA d ON r.TK_DRUZINA = d.id
                         WHERE d.TK_RED = ?
                         ORDER BY d.naziv_druzine
                     `,
-          [redId]
+          [localUserId, redId]
         );
 
         processData(result);

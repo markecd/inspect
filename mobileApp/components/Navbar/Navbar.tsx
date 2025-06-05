@@ -3,6 +3,7 @@ import { useRouter, usePathname } from 'expo-router';
 import styles from '../../assets/styles/Navbar/navbar.style';
 import { openDatabase } from '@/services/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { insertImageInFirestore } from '@/services/syncService';
 
 export default function Navbar() {
   const router = useRouter();
@@ -42,13 +43,17 @@ export default function Navbar() {
     console.log(result)
   }
 
+  const check = async() => {
+    syncImainsertImageInFirestorege("lalalalal");
+  }
+
   return (
     <View style={styles.container}>
       {tabs.map((tab, i) => (
         <TouchableOpacity key={i} onPress={
           () => router.push(tab.path)
         
-          //checkLvl
+          //check
           }>
           <Image source={tab.icon} style={tab.style} />
         </TouchableOpacity>
@@ -56,3 +61,7 @@ export default function Navbar() {
     </View>
   );
 }
+function syncImainsertImageInFirestorege(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+

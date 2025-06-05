@@ -1,8 +1,70 @@
 import NetInfo from '@react-native-community/netinfo';
-import { db as firestoreDb } from "@/modules/auth/firebase/config";
+import { db as firestoreDb, storage } from "@/modules/auth/firebase/config";
 import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import { openDatabase } from "@/services/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
+let netInfoListenerAdded = false;
+let lastSyncTime = 0;
+
+
+export function initializeNetInfoListener() {
+  if (netInfoListenerAdded) return;
+  netInfoListenerAdded = true;
+
+  NetInfo.addEventListener(state => {
+    const now = Date.now();
+    if (state.isConnected && now - lastSyncTime > 10000) {
+      console.log("NetInfo sync triggered...");
+      lastSyncTime = now;
+      syncData();
+      syncAllFriendsData();
+    }
+  });
+}
+
+export async function insertImageInFirestore(observationId: number, imagePath: string){
+    const netInfo = (await NetInfo.fetch()).isConnected;
+    if(!netInfo) return;
+
+    try{
+    const response = await fetch(imagePath);
+    const blob = await response.blob();
+
+    const fileName = imagePath.split("/").pop() || `photo_${Date.now()}.jpg`;
+    const path = `observations/${Date.now()}_${fileName}`;
+    
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, blob);
+
+    const imageUrl = await getDownloadURL(storageRef);
+
+    const firebaseUid = await AsyncStorage.getItem("user_firestore_id");
+
+    const observationRef = doc(firestoreDb, "users", firebaseUid!, "observations", observationId.toString());
+    await setDoc(observationRef, {image_path: imageUrl}, {merge: true});
+    } catch (error) {
+      console.error(error);
+    }
+}
+
+export async function saveObservationInFirestore(observationId: number, naziv: string, cas: string, lokacija: string, image_path: string){
+    const netInfo = (await NetInfo.fetch()).isConnected;
+    if(!netInfo) return;
+    const firebaseUid = await AsyncStorage.getItem("user_firestore_id");
+    const ref = doc(collection(firestoreDb, "users", firebaseUid!, "observations"), String(observationId));
+    await setDoc(ref, {
+      naziv: naziv,
+      cas: cas,
+      lokacija: lokacija,
+      TK_rod: observationId,
+    });
+    await insertImageInFirestore(observationId, image_path);
+}
+
+
 
 export async function syncData() {
   try {
@@ -63,13 +125,7 @@ export async function syncData() {
     );
 
     for (const o of observations) {
-      const ref = doc(collection(firestoreDb, "users", firebaseUid, "observations"), String(o.TK_rod));
-      await setDoc(ref, {
-        naziv: o.naziv,
-        cas: o.cas,
-        lokacija: o.lokacija,
-        TK_rod: o.TK_rod,
-      });
+      saveObservationInFirestore(o.TK_rod, o.naziv, o.cas, o.lokacija, o.pot_slike);
     }
 
     console.log("Sinhronizacija uspešno zaključena");
@@ -77,15 +133,6 @@ export async function syncData() {
     console.error("Napaka pri sinhronizaciji:", err);
   }
 }
-
-NetInfo.addEventListener(state => {
-  console.log("NetInfo state changed:", state);
-  if (state.isConnected) {
-    console.log("Povezava vzpostavljena, začenjam sync...");
-    syncData();
-    syncAllFriendsData();
-  }
-});
 
 export async function syncFriendData(firebaseUid: string) {
   const db = await openDatabase();

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { db } from '../services/firebase/firebaseConfig';
-import { auth } from '../services/firebase/firebaseConfig';
+import { auth, db } from '../services/firebase/firebaseConfig';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../services/firebase/firebaseConfig'; 
@@ -43,10 +42,6 @@ function AddArticle() {
       let imageUrl = '';
       if (imageFile) {
         const path = `articles/${user.uid}/${Date.now()}_${imageFile.name}`;
-        console.log("Path za upload:", path);
-        console.log("File obstaja?", !!imageFile);
-        console.log("UID:", user.uid);
-      
         const imageRef = ref(storage, path);
         await uploadBytes(imageRef, imageFile); 
         imageUrl = await getDownloadURL(imageRef);
