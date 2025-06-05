@@ -18,6 +18,7 @@ import {
 } from "@/modules/gamification/utils/achievementUtils";
 import Toast from "react-native-toast-message";
 import { useXpUpdater } from "@/hooks/useXpUpdater";
+import { saveObservationInFirestore } from "@/services/syncService";
 
 type Insect = {
   id: number;
@@ -151,6 +152,8 @@ export default function DetailsPage() {
       userId,
       rodId
     );
+
+    saveObservationInFirestore(rodId, naziv, casString, lokacijaShort, imagePath);
   }
 
   const handleSaveObservation = async () => {

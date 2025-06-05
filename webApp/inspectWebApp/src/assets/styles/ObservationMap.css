@@ -19,6 +19,7 @@ html, body, #root {
 .sidebarContainer{
     width: 20%;
     height: 100%;
+    background-color: #DDE5B6;
 }
 
 .mapContainer {

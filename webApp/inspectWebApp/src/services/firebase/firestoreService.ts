@@ -14,6 +14,7 @@ function parseObservation(doc: any): Observation {
       lat: parseFloat(latStr),
       lng: parseFloat(lngStr),
     },
+    image_path: data.image_path
   };
 }
 
