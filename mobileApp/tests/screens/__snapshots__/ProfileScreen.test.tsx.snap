@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProfileScreen ujema se s snapshotom 1`] = `
+<RCTScrollView
+  contentContainerStyle={
+    {
+      "backgroundColor": "#6C584C",
+      "flex": 1,
+    }
+  }
+>
+  <View>
+    <Text>
+      Mocked ProfileDetails
+    </Text>
+    <Text>
+      Mocked CollectionDetails
+    </Text>
+    <Text>
+      Mocked AchievementsDetails
+    </Text>
+  </View>
+</RCTScrollView>
+`;

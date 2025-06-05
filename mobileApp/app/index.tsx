@@ -7,7 +7,9 @@ import { ActivityIndicator, Text, View } from "react-native";
 import { initializeNetInfoListener} from "@/services/syncService";
 
 export default function Index() {
+
   useEffect(() => {
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         initializeNetInfoListener();
