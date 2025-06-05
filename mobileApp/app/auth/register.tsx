@@ -1,6 +1,6 @@
 // app/register.tsx
 import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../../modules/auth/firebase/auth';
 import { db } from '../../modules/auth/firebase/config'
@@ -46,6 +46,7 @@ export default function RegisterScreen() {
   };
 
   return (
+    <KeyboardAvoidingView style={{flex: 1, backgroundColor:'#6C584C'}} behavior={"padding"} keyboardVerticalOffset={10}>
     <View style={styles.container}>
       <Image style={styles.image} source={require('../../assets/images/splash-icon.png')}></Image>
       <TextInput placeholderTextColor="#F0EAD2" placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} />
@@ -57,11 +58,12 @@ export default function RegisterScreen() {
       <Link style={styles.link} href="/auth/login">Že imate narejen račun? Kliknite tukaj!</Link>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  image: {right: 45},
+  image: {left: 70, width:250, height:250},
   button: {backgroundColor: "#A98467", alignItems:"center", padding: 10, borderRadius: 10, marginBottom: 10, elevation: 5},
   link: {fontSize: 15, color:'#F0EAD2'},
   buttonText: {color:"#F0EAD2", fontWeight: 'bold', fontSize: 15},
