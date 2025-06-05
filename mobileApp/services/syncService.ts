@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import { db as firestoreDb } from "@/modules/auth/firebase/config";
-import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, getDoc } from "firebase/firestore";
 import { openDatabase } from "@/services/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -31,6 +31,7 @@ export async function syncData() {
 
     if (userData) {
       const userRef = doc(firestoreDb, "users", firebaseUid);
+   
       await setDoc(userRef, {
         username: userData.username,
         email: userData.email,
@@ -49,12 +50,15 @@ export async function syncData() {
 
     for (const a of achievements) {
       const ref = doc(collection(firestoreDb, "users", firebaseUid, "achievements"), String(a.id));
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
       await setDoc(ref, {
         naziv: a.naziv,
         opis: a.opis,
         xp_vrednost: a.xp_vrednost,
         dosezen: 1,
       });
+      }
     }
 
     const observations = dbLocal.getAllSync<any>(
@@ -64,12 +68,15 @@ export async function syncData() {
 
     for (const o of observations) {
       const ref = doc(collection(firestoreDb, "users", firebaseUid, "observations"), String(o.TK_rod));
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
       await setDoc(ref, {
         naziv: o.naziv,
         cas: o.cas,
         lokacija: o.lokacija,
         TK_rod: o.TK_rod,
       });
+    }
     }
 
     console.log("Sinhronizacija uspešno zaključena");
