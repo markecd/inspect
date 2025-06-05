@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../assets/styles/Sidebar.css";
 import Details from "./Details";
 import Filter from "./Filter";
@@ -9,8 +9,18 @@ type SidebarProps = {
   selectView: (view: string) => void;
 };
 
+
 function Sidebar({selectedObservation, selectView}: SidebarProps) {
   const [selected, setSelected] = useState("Jaz");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(()=>{
+        setLoading(true)
+
+  setTimeout(()=> {
+    setLoading(false)
+  }, 1000)    
+}, [selectedObservation])
 
   return (
     <div className="sidebarContentContainer">
@@ -42,16 +52,19 @@ function Sidebar({selectedObservation, selectView}: SidebarProps) {
         <Filter />
       </div>
       <div className="observationDetailsContainer">
-        {selectedObservation ? 
-        <Details 
-          imageURL={selectedObservation.image_path} 
-          insectId={selectedObservation.TK_rod.toString()}
-          observationOwner={selectedObservation.username!}
-          observationDate={selectedObservation.cas}
-          observationLocation={selectedObservation.position.lat.toString()} 
-        />
-          : <p className="noneSelected">Nobeno opažanje ni izbrano</p>
-       }
+{loading ? (
+  <div className="spinner"></div>
+) : selectedObservation ? (
+  <Details 
+    imageURL={selectedObservation.image_path} 
+    insectId={selectedObservation.TK_rod.toString()}
+    observationOwner={selectedObservation.username!}
+    observationDate={selectedObservation.cas}
+    observationLocation={selectedObservation.position.lat.toString()} 
+  />
+) : (
+  <p className="noneSelected">Nobeno opažanje ni izbrano</p>
+)}
         </div>
     </div>
   );

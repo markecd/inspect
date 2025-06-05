@@ -1,13 +1,6 @@
 import { useState } from "react";
 import "../assets/styles/Sidebar.css";
 
-type DetailsProps = {
-  imageURL: string;
-  insectId: string;
-  observationOwner: string;
-  observationDate: string;
-  observationLocation: string;
-};
 
 type Insect = {
   name: string;

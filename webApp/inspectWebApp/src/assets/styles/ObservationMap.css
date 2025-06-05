@@ -38,6 +38,10 @@ html, body, #root {
     background-color: #fff;
 }
 
+.mapMarker:hover{
+  cursor: pointer;
+}
+
 .mapMarkerImage{
     width: 100%;
     height: 100%;
