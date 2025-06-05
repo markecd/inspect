@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { getDocs, collection, doc, deleteDoc, getDoc, setDoc } from 'firebase/firestore';
 import { db as firestoreDb } from '../../modules/auth/firebase/config';
 import { auth } from '../../modules/auth/firebase/auth';
@@ -9,8 +9,10 @@ import { syncFriendData } from '../../services/syncService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../assets/styles/Notifications/notifications-list.style'
 import { syncFriendList } from '@/services/syncFriendList';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 export default function Notifications() {
+  const netInfo = useNetInfo();
   const [notifications, setNotifications] = useState<any[]>([]);
 
   const loadNotifications = async () => {
@@ -134,6 +136,19 @@ export default function Notifications() {
   useEffect(() => {
     loadNotifications();
   }, []);
+
+  if (!netInfo.isConnected) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Image
+          source={require('../../assets/icons/internet.png')}
+          style={{ width: 200, height: 200 }}
+    
+        />
+        <Text style={{ marginTop: 10, color: 'gray' }}>Ni internetne povezave</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView>

@@ -28,34 +28,54 @@ export default function FriendList() {
   const [input, setInput] = useState('');
   const [friends, setFriends] = useState<any[]>([]);
   const [error, setError] = useState('');
+  const [localUserId, setLocalUserId] = useState<number | null>(null);
+
   const router = useRouter();
     const netInfo = useNetInfo();
 
-  const loadFriends = async () => {
-    let isMounted = true;
-    try {
-      const db = await openDatabase();
-      const localUserIdStr = await AsyncStorage.getItem('local_user_id');
-      if (!localUserIdStr) return;
-      const localUserId = parseInt(localUserIdStr);
-
-      const result = db.getAllSync<any>(
-        `SELECT f.id AS id, f.username, f.level, f.xp
-         FROM UPORABNIK f
-         INNER JOIN PRIJATELJSTVO p ON f.id = p.tk_uporabnik2
-         WHERE p.tk_uporabnik1 = ?
-         ORDER BY f.xp DESC`,
-        [localUserId]
-      );
-
-      if (isMounted) setFriends(result);
-    } catch (err) {
-      console.error('Napaka pri nalaganju prijateljev:', err);
-    }
-    return () => {
-      isMounted = false;
+    const loadFriends = async () => {
+      let isMounted = true;
+      try {
+        const db = await openDatabase();
+        const localUserIdStr = await AsyncStorage.getItem('local_user_id');
+        if (!localUserIdStr) return;
+        const localUserId = parseInt(localUserIdStr);
+        setLocalUserId(localUserId);
+    
+        const result = db.getAllSync<any>(
+          `SELECT f.id AS id, f.username, f.level, f.xp
+           FROM UPORABNIK f
+           INNER JOIN PRIJATELJSTVO p ON f.id = p.tk_uporabnik2
+           WHERE p.tk_uporabnik1 = ?`,
+          [localUserId]
+        );
+    
+        const self = db.getFirstSync<any>(
+          `SELECT id, username, level, xp FROM UPORABNIK WHERE id = ?`,
+          [localUserId]
+        );
+    
+        if (self) {
+          const combined = [...result, self];
+    
+          const unique = combined.filter(
+            (item, index, arr) => arr.findIndex(u => u.id === item.id) === index
+          );
+    
+          const sorted = unique.sort((a, b) => b.xp - a.xp);
+    
+          if (isMounted) setFriends(sorted);
+        } else {
+          if (isMounted) setFriends(result);
+        }
+      } catch (err) {
+        console.error('Napaka pri nalaganju prijateljev:', err);
+      }
+      return () => {
+        isMounted = false;
+      };
     };
-  };
+    
 
   const handleAddFriend = async () => {
     try {
@@ -198,61 +218,85 @@ export default function FriendList() {
 
   return (
     <View style={styles.container}>
-      {friends.length === 0 ? (
-        <Text style={styles.empty}>Ni prijateljev</Text>
-      ) : (
-        friends.map((item, index) => (
-          <View key={item.id} style={styles.friendItem}>
-            <TouchableOpacity
-              onPress={() =>
-                router.push({
-                  pathname: '/profile',
-                  params: { id: item.id.toString() },
-                })
-              }
-              style={styles.friendInfo}
-            >
-              <View style={styles.nameWithMedal}>
-                {getMedal(index) && (
-                  <Image source={getMedal(index)!} style={styles.medalIcon} />
-                )}
-                <Text style={styles.friendName}>{item.username}</Text>
-              </View>
-              <Text style={styles.friendMeta}>
-                Level {item.level} | XP {item.xp}
+  {friends.length === 0 ? (
+    <Text style={styles.empty}>Ni prijateljev</Text>
+  ) : (
+    friends.map((item, index) => {
+      const isSelf = item.id === localUserId;
+
+      return (
+        <View
+          key={item.id}
+          style={[
+            styles.friendItem,
+            isSelf && {
+              borderColor: '#BC9143',
+              borderWidth: 2,
+              backgroundColor: '#5f4c3d', 
+            },
+          ]}
+        >
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: '/profile',
+                params: { id: item.id.toString() },
+              })
+            }
+            style={styles.friendInfo}
+          >
+            <View style={styles.nameWithMedal}>
+              {getMedal(index) && (
+                <Image source={getMedal(index)!} style={styles.medalIcon} />
+              )}
+              <Text style={styles.friendName}>
+                {item.username}
               </Text>
-            </TouchableOpacity>
+            </View>
+            <Text style={styles.friendMeta}>
+              #{index + 1} — Level {item.level} | XP {item.xp}
+            </Text>
+          </TouchableOpacity>
+
+        
+          {!isSelf && (
             <TouchableOpacity onPress={() => handleRemoveFriend(item.id)}>
-            {netInfo.isConnected && (<Image
-                source={require('../../assets/icons/deny_icon.png')}
-                style={styles.removeIcon}
-              />)}
-              
+              {netInfo.isConnected && (
+                <Image
+                  source={require('../../assets/icons/deny_icon.png')}
+                  style={styles.removeIcon}
+                />
+              )}
             </TouchableOpacity>
-          </View>
-        ))
-      )}
-  
-      {netInfo.isConnected && (<Text style={styles.empty}>Pošlji prošnjo za prijateljstvo</Text>)}
-      
-      {netInfo.isConnected && (
-        <View>
-          <View style={styles.addFriendBox}>
-            <TextInput
-              value={input}
-              onChangeText={setInput}
-              placeholder="Uporabniško ime"
-              style={styles.input}
-            />
-            <TouchableOpacity style={styles.customButton} onPress={handleAddFriend}>
-              <Text style={styles.customButtonText}>Pošlji</Text>
-            </TouchableOpacity>
-          </View>
-  
-          {error ? <Text style={styles.error}>{error}</Text> : null}
+          )}
         </View>
-      )}
-    </View> 
+      );
+    })
+  )}
+
+
+  {netInfo.isConnected && (
+    <>
+      <Text style={styles.empty}>Pošlji prošnjo za prijateljstvo</Text>
+      <View>
+        <View style={styles.addFriendBox}>
+          <TextInput
+            value={input}
+            onChangeText={setInput}
+            placeholder="Uporabniško ime"
+            style={styles.input}
+          />
+          <TouchableOpacity style={styles.customButton} onPress={handleAddFriend}>
+            <Text style={styles.customButtonText}>Pošlji</Text>
+          </TouchableOpacity>
+        </View>
+
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+      </View>
+    </>
+  )}
+</View>
+
   );
   
 }
