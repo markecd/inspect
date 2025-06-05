@@ -6,7 +6,7 @@ import {
   orderBy,
   Timestamp,
 } from 'firebase/firestore';
-import { db } from '../services/firebase/config';
+import { db } from '../services/firebase/firebaseConfig'
 import Article from '../components/Article/Article';
 import '../assets/styles/articles.css';
 

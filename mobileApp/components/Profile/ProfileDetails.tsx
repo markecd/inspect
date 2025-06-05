@@ -18,6 +18,8 @@ export default function ProfileDetails({ friendId }: Props) {
     try {
       await signOut(auth);
       await AsyncStorage.removeItem("local_user_id");
+      await AsyncStorage.removeItem("user_xp");
+      await AsyncStorage.removeItem("user_level");
       router.replace("/auth/login");
     } catch (error) {
       console.error("Napaka pri odjavi:", error);

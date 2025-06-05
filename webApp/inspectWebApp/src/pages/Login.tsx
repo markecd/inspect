@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../services/firebase/config";
+import { auth } from "../services/firebase/firebaseConfig";
 import '../assets/styles/login.css'
 import splashIcon from '../assets/images/splash-icon.png';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,9 @@ function Login(){
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log("Prijava uspešna:", user.uid);
+      console.log(user.uid)
+      localStorage.setItem("userId", user.uid);
+      navigate("/");
     } catch (err: any) {
       console.error("Napaka pri prijavi:", err.message);
       setError("Prijava ni uspela. Preveri e-pošto in geslo.");

@@ -6,11 +6,13 @@ import { router } from "expo-router";
 import { Link } from "expo-router";
 import { openDatabase } from "@/services/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUserStats } from "@/modules/gamification/contexts/UserStatsContext";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { setStats } = useUserStats();
 
   const handleLogin = async () => {
     try {
@@ -29,8 +31,8 @@ export default function LoginScreen() {
       }
 
       const db = await openDatabase();
-      const result = db.getFirstSync<{ id: number }>(
-        `SELECT id FROM UPORABNIK WHERE firebase_uid = ?`,
+      const result = db.getFirstSync<{ id: number, xp: number, level: number }>(
+        `SELECT id, xp, level FROM UPORABNIK WHERE firebase_uid = ?`,
         [user.uid]
       );
 
@@ -39,7 +41,12 @@ export default function LoginScreen() {
       }
 
       await AsyncStorage.setItem("local_user_id", result.id.toString());
+      await AsyncStorage.setItem("user_xp", result.xp.toString());
+      await AsyncStorage.setItem("user_level", result.level.toString());
       await AsyncStorage.setItem("user_firestore_id", user.uid);
+      const xp = result.xp;
+      const level = result.level;
+      setStats({ xp , progress: xp % 250, levelUp: false, level: level})
       router.push("/observation");
     } catch (err: any) {
       setError(err.message);
