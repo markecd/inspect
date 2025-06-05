@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../services/firebase/config';
+import { db } from '../services/firebase/firebaseConfig';
 import type { Timestamp } from 'firebase/firestore';
 import '../assets/styles/article-details.css';
 
