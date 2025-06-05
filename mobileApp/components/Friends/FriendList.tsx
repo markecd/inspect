@@ -22,12 +22,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { openDatabase } from '@/services/database';
 import { styles } from '../../assets/styles/Friends/friends-list.style';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 export default function FriendList() {
   const [input, setInput] = useState('');
   const [friends, setFriends] = useState<any[]>([]);
   const [error, setError] = useState('');
   const router = useRouter();
+    const netInfo = useNetInfo();
 
   const loadFriends = async () => {
     let isMounted = true;
@@ -169,6 +171,8 @@ export default function FriendList() {
         [friendId]
       )?.firebase_uid;
 
+
+
       if (currentUid && friendFirebaseUid) {
         await deleteDoc(doc(firestoreDb, "users", currentUid, "friends", friendFirebaseUid));
         await deleteDoc(doc(firestoreDb, "users", friendFirebaseUid, "friends", currentUid));
@@ -219,29 +223,36 @@ export default function FriendList() {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleRemoveFriend(item.id)}>
-              <Image
+            {netInfo.isConnected && (<Image
                 source={require('../../assets/icons/deny_icon.png')}
                 style={styles.removeIcon}
-              />
+              />)}
+              
             </TouchableOpacity>
           </View>
         ))
       )}
-       <Text style={styles.empty}>Pošlji prošnjo za prijateljstvo</Text>
-      <View style={styles.addFriendBox}>
-        
-        <TextInput
-          value={input}
-          onChangeText={setInput}
-          placeholder="Uporabniško ime"
-          style={styles.input}
-        />
-        <TouchableOpacity style={styles.customButton} onPress={handleAddFriend}>
-          <Text style={styles.customButtonText}>Pošlji</Text>
-        </TouchableOpacity>
-      </View>
-
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-    </View>
+  
+      {netInfo.isConnected && (<Text style={styles.empty}>Pošlji prošnjo za prijateljstvo</Text>)}
+      
+      {netInfo.isConnected && (
+        <View>
+          <View style={styles.addFriendBox}>
+            <TextInput
+              value={input}
+              onChangeText={setInput}
+              placeholder="Uporabniško ime"
+              style={styles.input}
+            />
+            <TouchableOpacity style={styles.customButton} onPress={handleAddFriend}>
+              <Text style={styles.customButtonText}>Pošlji</Text>
+            </TouchableOpacity>
+          </View>
+  
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+        </View>
+      )}
+    </View> 
   );
+  
 }

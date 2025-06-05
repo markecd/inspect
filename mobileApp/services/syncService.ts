@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import { db as firestoreDb, storage } from "@/modules/auth/firebase/config";
-import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, getDoc } from "firebase/firestore";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import { openDatabase } from "@/services/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -55,6 +55,8 @@ export async function saveObservationInFirestore(observationId: number, naziv: s
     if(!netInfo) return;
     const firebaseUid = await AsyncStorage.getItem("user_firestore_id");
     const ref = doc(collection(firestoreDb, "users", firebaseUid!, "observations"), String(observationId));
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
     await setDoc(ref, {
       naziv: naziv,
       cas: cas,
@@ -62,6 +64,7 @@ export async function saveObservationInFirestore(observationId: number, naziv: s
       TK_rod: observationId,
     });
     await insertImageInFirestore(observationId, image_path);
+  }
 }
 
 
@@ -93,6 +96,7 @@ export async function syncData() {
 
     if (userData) {
       const userRef = doc(firestoreDb, "users", firebaseUid);
+   
       await setDoc(userRef, {
         username: userData.username,
         email: userData.email,
@@ -111,12 +115,15 @@ export async function syncData() {
 
     for (const a of achievements) {
       const ref = doc(collection(firestoreDb, "users", firebaseUid, "achievements"), String(a.id));
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
       await setDoc(ref, {
         naziv: a.naziv,
         opis: a.opis,
         xp_vrednost: a.xp_vrednost,
         dosezen: 1,
       });
+      }
     }
 
     const observations = dbLocal.getAllSync<any>(
@@ -127,6 +134,7 @@ export async function syncData() {
     for (const o of observations) {
       saveObservationInFirestore(o.TK_rod, o.naziv, o.cas, o.lokacija, o.pot_slike);
     }
+    
 
     console.log("Sinhronizacija uspešno zaključena");
   } catch (err) {

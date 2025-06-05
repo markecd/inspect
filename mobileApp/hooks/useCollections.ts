@@ -34,11 +34,9 @@ export function useCollections(userIdOverride?: number) {
           resolvedUserId = parseInt(localUserIdStr);
         }
 
+        console.log("Prikazujem kolekcije za userId:", resolvedUserId);
 
-const debug = db.getAllSync<any>(
-  `SELECT TK_rod, TK_uporabnik FROM OPAZANJE WHERE TK_uporabnik = ?`,
-  [resolvedUserId]
-);
+
 
         const result = db.getAllSync<any>(
           `SELECT 

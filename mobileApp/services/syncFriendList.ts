@@ -43,8 +43,8 @@ export async function syncFriendList() {
       await syncFriendData(friendUid);
     }
 
-    console.log("📡 Prijatelji iz Firestore sinhronizirani.");
+    console.log("Prijatelji iz Firestore sinhronizirani.");
   } catch (error) {
-    console.error("⚠️ Napaka pri syncFriendsFromFirestore:", error);
+    console.error("Napaka pri syncFriendsFromFirestore:", error);
   }
 }
