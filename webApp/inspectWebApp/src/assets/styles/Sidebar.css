@@ -38,6 +38,7 @@
   padding-bottom: 4px;
   transition: color 0.3s;
   background: transparent;
+  color: black;
 }
 
 .tab:hover {
@@ -62,6 +63,8 @@
 .tabSeperator {
   font-size: 40px;
   cursor: default;
+    color: black;
+
 }
 
 .detailsContainer {
@@ -85,16 +88,26 @@
 }
 .insectName {
   margin: 0;
+    color: black;
+
 }
 .insectLatinName {
   margin: 0;
   font-style: italic;
+    color: black;
+
 }
 .observationOwner {
+color: black;
+
 }
 .observationDate {
+      color: black;
+
 }
 .observationLocation {
+      color: black;
+
 }
 .infoContainer {
   display: flex;
@@ -106,6 +119,16 @@
 
 .description {
   font-size: 10px;
+    color: black;
+
+}
+p{
+    margin: 0
+}
+.observationMainInfoContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
 }
 
 .filterWrapper {
