@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../modules/auth/firebase/auth";
 import { router } from "expo-router";
@@ -54,6 +54,7 @@ export default function LoginScreen() {
   };
 
   return (
+    <KeyboardAvoidingView style={{flex: 1, backgroundColor:'#6C584C'}} behavior={"padding"} keyboardVerticalOffset={5}>
     <View style={styles.container}>
       <Image style={styles.image} source={require('../../assets/images/splash-icon.png')}></Image>
       <TextInput
@@ -77,11 +78,12 @@ export default function LoginScreen() {
       <Link style={styles.link} href="/auth/register">Še niste registrirani? Kliknite tukaj!</Link>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  image: {right: 45},
+  image: {left: 70,height: 250, width: 250},
   button: {backgroundColor: "#A98467", alignItems:"center", padding: 10, borderRadius: 10, marginBottom: 10, elevation: 5},
   link: {fontSize: 15, color:'#F0EAD2'},
   buttonText: {color:"#F0EAD2", fontWeight: 'bold', fontSize: 15},
