@@ -4,16 +4,17 @@ import './App.css'
 import Login from './pages/Login';
 import Articles from './pages/Articles';
 import AddArticle from './pages/AddArticle';
-//import ObservationMap from './pages/ObservationMap';
+import ObservationMap from './pages/ObservationMap';
+import RequireAuth from './services/firebase/authService';
 
 function App() {
 
   return (
     <Router>
       <Routes>
-        {/*<Route path="/" element={<ObservationMap />}/>}*/} 
-        <Route path="/" element={<Login />}/>
-        <Route path="/articles" element={<Articles />}/>
+        <Route path="/login" element={<Login />}/>
+        <Route path="/" element={<RequireAuth><ObservationMap /></RequireAuth>}/>
+        <Route path="/articles" element={<RequireAuth><Articles /></RequireAuth>}/>
         <Route path="/add-article" element={<AddArticle />}/>
       </Routes>
     </Router>
