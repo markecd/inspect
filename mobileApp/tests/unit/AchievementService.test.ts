@@ -1,4 +1,3 @@
-// tests/achievementSystem.test.ts
 import { checkAchievements } from '@/modules/gamification/services/AchievementService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
