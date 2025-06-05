@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { db } from '../services/firebase/config';
-import { auth } from '../services/firebase/config';
+import { db } from '../services/firebase/firebaseConfig';
+import { auth } from '../services/firebase/firebaseConfig';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../services/firebase/config'; 
+import { storage } from '../services/firebase/firebaseConfig'; 
 
 import '../assets/styles/add-article.css';
 

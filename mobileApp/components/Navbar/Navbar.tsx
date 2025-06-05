@@ -36,10 +36,10 @@ export default function Navbar() {
         const db = await openDatabase();
     const result = db.getAllSync(
       `
-      SELECT * FROM UPORABNIK_DOSEZEK
+      SELECT * FROM UPORABNIK
       `
     )
-    
+    console.log(result)
   }
 
   return (
@@ -48,7 +48,7 @@ export default function Navbar() {
         <TouchableOpacity key={i} onPress={
           () => router.push(tab.path)
         
-          //databaseClearance
+          //checkLvl
           }>
           <Image source={tab.icon} style={tab.style} />
         </TouchableOpacity>
