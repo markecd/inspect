@@ -9,6 +9,7 @@ export default StyleSheet.create({
     padding: 16,
     flexDirection: "row",
     alignItems: "flex-start",
+    justifyContent: "space-between",
     position: "relative",
     paddingTop: 35,
     elevation: 10,
@@ -24,7 +25,7 @@ export default StyleSheet.create({
   },
   username: {
     color: "#F0EAD2",
-    fontSize: 24,
+    fontSize: 15,
     letterSpacing: 0.3,
     fontWeight: "bold",
     alignSelf: "flex-start",

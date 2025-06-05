@@ -84,7 +84,7 @@ export default function ProfileDetails({ friendId }: Props) {
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-end",
+          justifyContent: "center",
           alignItems: "center",
         }}
       >

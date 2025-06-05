@@ -53,7 +53,7 @@ export default function Navbar() {
         <TouchableOpacity key={i} onPress={
           () => router.push(tab.path)
         
-          //check
+          //databaseClearance
           }>
           <Image source={tab.icon} style={tab.style} />
         </TouchableOpacity>
