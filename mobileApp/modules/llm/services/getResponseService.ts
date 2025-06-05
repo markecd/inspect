@@ -1,9 +1,3 @@
-import { collection, doc, setDoc, getDocs, getDoc } from "firebase/firestore";
-import { db as firestoreDb } from "@/modules/auth/firebase/config";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { openDatabase } from "@/services/database";
-import { getConversationFromFirestore, saveConversationToFirestore } from "./conversationServiceFirestore";
-
 export type Message = {
   role: "user" | "assistant";
   content: string;
@@ -16,7 +10,7 @@ export async function getModelResponse(messages: Message[]) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer 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`,
+        Authorization: `Bearer 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`, //TO DO ne prepozna iz .env... fixaj
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
