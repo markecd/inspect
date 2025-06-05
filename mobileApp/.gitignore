@@ -2,6 +2,8 @@
 
 .env
 
+#jest
+/coverage
 #SonarQube
 sonar-project.properties
 .sonar_lock
