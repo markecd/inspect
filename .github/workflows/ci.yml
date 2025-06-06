@@ -1,0 +1,119 @@
+name: QA CI/CD Pipeline
+
+on: 
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs: 
+  sonarqube-scan: 
+    name: SonarQube scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@v4
+
+      - name: run sonarqube scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env: 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ./mobileApp
+
+  security-audit: 
+    name: Eslint check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.2.0
+
+      - name: install deps
+        working-directory: ./mobileApp
+        run: npm i 
+      
+      - name: run security audit
+        run: npm audit
+        
+  eslint-check: 
+    name: Eslint check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.2.0
+
+      - name: install deps
+        working-directory: ./mobileApp
+        run: npm i 
+      
+      - name: run eslint 
+        working-directory: ./mobileApp
+        run: npx eslint --ext .ts,.tsx
+
+  unit-tests:
+    name: Unit tests 
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: repo checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.2.0
+
+      - name: install deps
+        working-directory: ./mobileApp
+        run: npm i 
+
+      - name: run unit tests
+        working-directory: ./mobileApp
+        run: npx jest tests/unit --coverage
+
+  integration-tests: 
+    name: Integration tests
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: repo checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.2.0
+
+      - name: install deps
+        working-directory: ./mobileApp
+        run: npm i 
+
+      - name: prepare firebase tools
+        working-directory: ./mobileApp
+        run: npm i -g firebase-tools
+
+      - name: run non-firebase-emulator tests
+        working-directory: ./mobileApp
+        run: npx jest tests/integration/noEmulator
+      
+      - name: run firebase storage tests
+        working-directory: ./mobileApp
+        run: firebase emulators:exec --only storage "npx jest tests/integration/storage/storage.test.ts --config jest.integration.config.js" 
+
+      - name: run firebase firestore tests
+        working-directory: ./mobileApp
+        run: firebase emulators:exec --only firestore "npx jest tests/integration/firestore/firestore.test.ts --config jest.integration.config.js" 
+      
