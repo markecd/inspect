@@ -23,7 +23,7 @@ jobs:
           projectBaseDir: ./mobileApp
 
   security-audit: 
-    name: Eslint check
+    name: Security audit
     runs-on: ubuntu-latest
 
     steps:
