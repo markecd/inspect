@@ -2,6 +2,7 @@
     align-self: center;
     width: 100%;
     max-width: none;
+
   }
 
   .articles-heading {
@@ -17,8 +18,9 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 20px;
+    margin-left: 33px;
   }
 
   .articles-controls {
