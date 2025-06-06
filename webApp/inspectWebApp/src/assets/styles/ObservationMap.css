@@ -13,13 +13,15 @@ html, body, #root {
   display: flex;
   flex-direction: row;
   width: 100%; 
-  height: 100vh; 
+  height: 90vh;
 }
 
 .sidebarContainer{
-    width: 20%;
+    width: 22%;
     height: 100%;
     background-color: #DDE5B6;
+    overflow-y: scroll;
+    overflow-x:hidden;
 }
 
 .mapContainer {

@@ -10,7 +10,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "test": "jest",
-     "e2e": "cross-env E2E=true detox test --configuration android.emu.debug --reuse"
+    "e2e": "cross-env E2E=true detox test --configuration android.emu.debug"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

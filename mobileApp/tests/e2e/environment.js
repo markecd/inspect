@@ -1,5 +1,5 @@
-const { DetoxCircusEnvironment } = require('detox/runners/jest-circus');
-const { execSync } = require('child_process');
+import { DetoxCircusEnvironment } from 'detox/runners/jest-circus';
+import { adapter } from 'detox/runners/jest/adapter';
 
 class CustomDetoxEnvironment extends DetoxCircusEnvironment {
   constructor(config, context) {
@@ -8,12 +8,11 @@ class CustomDetoxEnvironment extends DetoxCircusEnvironment {
 
   async setup() {
     await super.setup();
-   
+    this.handleTestEvent = adapter.handleTestEvent;
   }
 
   async teardown() {
     await super.teardown();
-
   }
 }
 
