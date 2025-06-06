@@ -20,7 +20,7 @@ jobs:
         env: 
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: ./mobileApp
+          projectBaseDir: .
 
   security-audit: 
     name: Security audit
