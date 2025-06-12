@@ -1,5 +1,9 @@
 module.exports = {
-  testMatch: ['**/tests/e2e/**/*.e2e.ts'],
+  rootDir: './',
+  testMatch: ['**/tests/e2e/**/*.e2e.{js,ts}'],
   testTimeout: 120000,
-  testEnvironment: './tests/e2e/environment.js',
+  setupFilesAfterEnv: ['detox/runners/jest/setup'], 
+  transform: {
+    '^.+\\.(js|ts|tsx)$': 'babel-jest',
+  },
 };
