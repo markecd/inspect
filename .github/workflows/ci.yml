@@ -106,6 +106,8 @@ jobs:
         run: npm i -g firebase-tools
 
       - name: run non-firebase-emulator tests
+        env: 
+          EXPO_PUBLIC_LLM_API_KEY: ${{ secrets.EXPO_PUBLIC_LLM_API_KEY }}
         working-directory: ./mobileApp
         run: npx jest tests/integration/noEmulator
       
