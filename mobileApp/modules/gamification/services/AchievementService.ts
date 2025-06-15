@@ -55,7 +55,7 @@ class VsestranskiOpazovalecAchievement implements Achievement {
 
   check(): boolean {
     let count = 0;
-    for (var item of rodsReds) {
+    for (let item of rodsReds) {
       count += item.count;
       if (count >= 3) {
         return true;
@@ -72,7 +72,7 @@ class IzkusenIskalecAchievement implements Achievement {
 
   check(): boolean {
     let count = 0;
-    for (var item of rodsReds) {
+    for (let item of rodsReds) {
       count += item.count;
       if (count >= 30) {
         return true;
@@ -152,7 +152,7 @@ class OpazovalecAchievement implements Achievement {
 
   check(): boolean {
     let count = 0;
-    for (var item of rodsReds) {
+    for (let item of rodsReds) {
       count += item.count;
       if (count >= 10) {
         return true;

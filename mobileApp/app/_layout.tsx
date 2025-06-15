@@ -15,7 +15,6 @@ import { registerBackgroundSync } from '@/services/backgroundSync';
 export default function RootLayout() {
   
     useEffect(() => {
-      console.log("aha")
       registerBackgroundSync(); 
     }, []);
 

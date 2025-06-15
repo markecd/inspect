@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 export type Message = {
   role: "user" | "assistant";
   content: string;
@@ -13,7 +10,7 @@ export async function getModelResponse(messages: Message[]) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`, //TO DO ne prepozna iz .env... fixaj
+        Authorization: `Bearer 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`, 
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",

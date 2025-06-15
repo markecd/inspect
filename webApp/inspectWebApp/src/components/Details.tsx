@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "../assets/styles/Sidebar.css";
 import rawInsectData from "../assets/insect_map_extended.json";
 
