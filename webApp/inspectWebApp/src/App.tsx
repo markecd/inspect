@@ -13,14 +13,18 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/login" element={<Login />}/>
-        <Route path="/" element={<RequireAuth><ObservationMap /></RequireAuth>}/>
-        <Route path="/articles" element={<RequireAuth><Articles /></RequireAuth>}/>
-        <Route path="/articles/:uid/:id" element={<RequireAuth><ArticleDetails /></RequireAuth>} />
-        <Route path="/add-article" element={<RequireAuth><AddArticle /></RequireAuth>} />
-      </Routes>
+      <div className="appLayout">
+        <Navbar />
+        <div className="appContent">
+          <Routes>
+            <Route path="/login" element={<Login />}/>
+            <Route path="/" element={<RequireAuth><ObservationMap /></RequireAuth>}/>
+            <Route path="/articles" element={<RequireAuth><Articles /></RequireAuth>}/>
+            <Route path="/articles/:uid/:id" element={<RequireAuth><ArticleDetails /></RequireAuth>} />
+            <Route path="/add-article" element={<RequireAuth><AddArticle /></RequireAuth>} />
+          </Routes>
+        </div>
+      </div>
     </Router>
   )
 }

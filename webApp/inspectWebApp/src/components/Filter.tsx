@@ -2,14 +2,6 @@ import { useState } from "react";
 import "../assets/styles/Sidebar.css";
 
 
-type Insect = {
-  name: string;
-  latin: string;
-  description: string;
-  red: string;
-  druzina: string;
-};
-
 const redCodeToNameMap: Record<string, string> = {
   H: "Hrošči",
   K: "Kobilice",
@@ -25,7 +17,6 @@ function Filter() {
   const [selectedRed, setSelectedRed] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [filteredResults, setFilteredResults] = useState<Insect[]>([]);
 
   const handleSearch = () => {
 console.log(selectedRed, fromDate, toDate)
