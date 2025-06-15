@@ -27,9 +27,9 @@ export default function Navbar() {
       db.execSync(`UPDATE UPORABNIK SET xp = 0, level = 1`);
       AsyncStorage.removeItem("user_xp");
       AsyncStorage.removeItem("user_level");
-      console.log("✅ Database reset successfully.");
+      console.log("Database reset successfully.");
     } catch (error) {
-      console.error("❌ Error during database clearance:", error);
+      console.error("Error during database clearance:", error);
     }
   };
 

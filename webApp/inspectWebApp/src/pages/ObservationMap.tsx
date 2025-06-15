@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { getAllObservations, getUserFriendsObservations, getUserObservations } from "../services/firebase/firestoreService";
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const mapId = import.meta.env.VITE_MAP_ID;
-console.log(mapId);
 
 export type Observation = {
   id: string;
@@ -28,11 +27,8 @@ function ObservationMap() {
   const [selected, setSelected] = useState("Jaz");
   const [zoom, setZoom] = useState(12);
 
-  const image = "https://www.bodieko.si/wp-content/uploads/2011/05/Pikapolonica.jpg";
-
   useEffect(() => {
     const fetchData = async () => {
-        console.log(selected)
       try {
         const userId = localStorage.getItem("userId");
         if (!userId) {
@@ -88,7 +84,7 @@ function ObservationMap() {
                   className="mapMarker"
                   onClick={() => setSelectedObservation(item)}
                 >
-                  <img className="mapMarkerImage" src={item.image_path} />
+                  <img className="mapMarkerImage" src={item.image_path} alt="Marker image"/>
                 </div>
               </AdvancedMarker>
             ))}

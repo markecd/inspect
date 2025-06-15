@@ -13,7 +13,7 @@ interface ArticleProps {
   imageUrl?: string;
 }
 
-const Article: React.FC<ArticleProps> = ({ id, uid, title, content, username, createdAt, imageUrl }) => {
+const Article: React.FC<ArticleProps> = ({ id, uid, title, username, createdAt, imageUrl }) => {
   const navigate = useNavigate();
 
   const formatDate = (timestamp?: Timestamp) => {
