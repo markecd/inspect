@@ -9,10 +9,10 @@ Inspect je mobilna ter spletna aplikacija, namenjena skeniranju žuželk na tere
 - **Firebase Authentication**
 - **SQLite** (lokalna baza)
 - **Firebase Firestore** (sinhronizacija)
-- **Background sync** (`expo-background-fetch`)
-- **Glasovni komentarji**, **opazovanja**, **dosežki**, **profili prijateljev**
+- **Background sync** (`expo-background-fetch`, NetInfo)
+
 
 ### Web dashboard
 - **React + Vite**
 - **Firebase Authentication**
-- **Firestore** za prikaz člankov, statistike, upravljanje vsebin
+- **Firebase Firestore**
