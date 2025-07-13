@@ -153,6 +153,7 @@ export default function DetailsPage() {
       rodId
     );
 
+    
     saveObservationInFirestore(rodId, naziv, casString, lokacijaShort, imagePath);
   }
 
