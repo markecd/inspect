@@ -15,7 +15,7 @@
 - Scan and save insect observations on the go
 - Add text comments and voice notes to saved observations
 - Ask questions about insects using an integrated AI assistant (Buggy)
-- Add friends and compare progress on a global leaderboard
+- Add friends and compare progress on a leaderboard
 - Earn XP and unlock achievements through gamified interaction
 - Offline-first design with local SQLite database support
 - Background sync when the device is online
